@@ -1,7 +1,7 @@
 from github import Github, GithubException, Auth
 
-def validate_api_key(key: str) -> Github | None:
-  auth = Auth.Token(key)
+def validate_api_token(token: str) -> Github | None:
+  auth = Auth.Token(token)
   g = Github(auth=auth)
   try:
     # get_user().login will fail if bad credentials  

@@ -1,12 +1,12 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import validate_api_key
+from modules import validate_api_token
 
 def main() -> None:
   load_dotenv()
-  key = str(os.getenv("GH_API_KEY"))
-  g = validate_api_key(key)
+  token = str(os.getenv("GH_API_TOKEN"))
+  g = validate_api_token(token)
 
   if g == None:
     return
