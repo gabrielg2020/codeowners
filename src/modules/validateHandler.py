@@ -14,7 +14,12 @@ def validate_api_token(token: str) -> Github | None:
     return None
 
 def validate_org_name(g: Github, name: str) -> Organization | None:
-  pass
+  try:
+    org = g.get_organization(name)
+    return org
+  except GithubException as e:
+    print(f"Failed to authenticate: {e.data['message']}")
+    return None
 
 def validate_github_repo(o: Organization) -> Repository | None:
   pass
