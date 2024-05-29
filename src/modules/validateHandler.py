@@ -1,7 +1,8 @@
-from github import Github, GithubException
+from github import Github, GithubException, Auth
 
 def validate_api_key(key: str) -> Github | None:
-  g = Github(key)
+  auth = Auth.Token(key)
+  g = Github(auth=auth)
   try:
     # get_user().login will fail if bad credentials  
     g.get_user().login
