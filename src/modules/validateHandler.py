@@ -13,7 +13,7 @@ def validate_api_token(token: str) -> Github | None:
     print(f"Failed to authenticate: {e.data['message']}")
     return None
 
-def validate_org_name(g: Github, name: str) -> Organization | None:
+def validate_org_username(g: Github, name: str) -> Organization | None:
   try:
     org = g.get_organization(name)
     return org
