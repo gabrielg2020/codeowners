@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import validate_api_token, validate_org_username
+from modules import validate_api_token, validate_org_username, validate_github_repo
 
 def main() -> None:
   # Load .env values
@@ -18,6 +18,12 @@ def main() -> None:
   org = validate_org_username(g, org_username)
   if org == None:
     return
+  
+  # Check .github repo
+  repo = validate_github_repo(org)
+  if repo == None:
+    return
+
 
 if __name__ == "__main__":
   main()

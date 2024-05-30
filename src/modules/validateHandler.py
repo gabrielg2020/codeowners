@@ -18,11 +18,16 @@ def validate_org_username(g: Github, username: str) -> Organization | None:
     org = g.get_organization(username)
     return org
   except GithubException as e:
-    print(f"Failed to authenticate: {e.data['message']}")
+    print(f"Failed to find organisation: {e.data['message']}")
     return None
 
-def validate_github_repo(o: Organization) -> Repository | None:
-  pass
+def validate_github_repo(org: Organization) -> Repository | None:
+  try:
+    repo = org.get_repo(".github")
+    return repo
+  except GithubException as e:
+    print(f"Failed to find .github repo: {e.data['message']}")
+    return None
 
 def validate_codowners_file(r: Repository) -> File | None:
   pass
