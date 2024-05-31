@@ -1,7 +1,7 @@
 import os
 import pytest
 from github import Github, Auth
-from modules import get_github_instance, get_organisation, get_repo, get_file, get_members
+from modules import get_github_instance, get_organisation, get_repo, get_file, get_members, get_repos
 
 # --- Auth Variables ---
 token = str(os.getenv("GH_API_TOKEN"))
@@ -14,6 +14,7 @@ org_name = "codeowners-rfc-test"
 repo_name = "testing-repo"
 file_name = "test-file"
 members = ("gabrielg2020", "testacc03")
+repos = ('cool-project', 'facebook2', 'testing-repo')
 
 login = gh_instance.get_user().login
 org = gh_instance.get_organization(org_name)
@@ -52,3 +53,10 @@ def test_get_members() -> None:
   # Given an invalid organisation
   invalid_org = get_organisation(gh_instance, "non_valid_org_username")
   assert get_members(invalid_org) is None
+
+def test_get_repos() -> None:
+  # Given a valid organisation
+  assert get_repos(org) == repos
+  # Given an invalid organisation
+  invalid_org = get_organisation(gh_instance, "non_valid_org_username")
+  assert get_repos(invalid_org) is None

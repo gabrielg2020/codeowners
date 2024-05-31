@@ -17,7 +17,5 @@ def main() -> None:
   
   g, org, repo = initialise_result
 
-  print(get_codeowners_history_file(repo)['developers'][0])
-
 if __name__ == "__main__":
   main()
