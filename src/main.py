@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import get_github_instance, get_organisation, get_repo, get_file
+from modules import initialise_api
 
 def main() -> None:
   # Load .env values
@@ -9,25 +9,13 @@ def main() -> None:
   token = str(os.getenv("GH_API_TOKEN"))
   org_username = str(os.getenv("org_username"))
 
-  # Check GitHub token
-  g = get_github_instance(token)
-  if g == None:
+  initialise_result = initialise_api(token, org_username, '.github')
+  if initialise_result is None:
+    print("Initalisation failed. Please check your token, organisation name, or repository name")
     return
-  
-  # Check Organisation name
-  org = get_organisation(g, org_username)
-  if org == None:
-    return
-  
-  # Check .github repo
-  repo = get_repo(org, 'testing-repo')
-  if repo == None:
-    return
-  
-  # Check CODEOWNERS file
-  codeowners = get_file(repo, 'test-file')
-  if codeowners == None:
-    return
+  else:
+    g, org, repo = initialise_result
+    
 
 if __name__ == "__main__":
   main()
