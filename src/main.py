@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import validate_api_token, validate_org_username, validate_github_repo
+from modules import validate_api_token, validate_org_username, validate_github_repo, validate_file
 
 def main() -> None:
   # Load .env values
@@ -23,7 +23,13 @@ def main() -> None:
   repo = validate_github_repo(org)
   if repo == None:
     return
+  
+  # Check CODEOWNERS file
+  codeowners = validate_file(repo, 'asdf')
+  if codeowners == None:
+    return
 
+  print(codeowners)
 
 if __name__ == "__main__":
   main()

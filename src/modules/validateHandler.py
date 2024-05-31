@@ -1,7 +1,7 @@
 from github import Github, GithubException, Auth
 from github.Organization import Organization
 from github.Repository import Repository
-from github.File import File
+from github.ContentFile import ContentFile
 
 def validate_api_token(token: str) -> Github | None:
   auth = Auth.Token(token)
@@ -28,9 +28,11 @@ def validate_github_repo(org: Organization) -> Repository | None:
   except GithubException as e:
     print(f"Failed to find .github repo: {e.data['message']}")
     return None
-
-def validate_codowners_file(r: Repository) -> File | None:
-  pass
-
-def validate_co_history_file(r: Repository) -> File | None:
-  pass
+  
+def validate_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile | None:
+  try:
+    file = r.get_contents(file_name)
+    return file
+  except GithubException as e:
+    print(f'Failed to find CODEOWNERS file: {e.data['message']}')
+    return None
