@@ -51,6 +51,10 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
   """Returns a ContentFile instance if file_name is valid, else None."""
   try:
     file = r.get_contents(file_name)
+    # Check if file_name is the name of a directory
+    if isinstance(file, list[ContentFile]):
+      return None
+    
     return file
   except GithubException as e:
     print(f'Failed to find file: {e.data['message']}')
