@@ -7,15 +7,16 @@ def main() -> None:
   # Load .env values
   load_dotenv()
   token = str(os.getenv("GH_API_TOKEN"))
-  org_username = str(os.getenv("org_username"))
+  org_username = "codeowners-rfc-test"
+  repo_name = ".github"
 
-  initialise_result = initialise_api(token, org_username, '.github')
+  initialise_result = initialise_api(token, org_username, repo_name)
   if initialise_result is None:
     print("Initalisation failed. Please check your token, organisation name, or repository name")
     return
   else:
     g, org, repo = initialise_result
-    
+
 
 if __name__ == "__main__":
   main()
