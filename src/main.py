@@ -20,16 +20,14 @@ def main() -> None:
     return
   
   # Check .github repo
-  repo = validate_github_repo(org)
+  repo = validate_github_repo(org, 'testing-repo')
   if repo == None:
     return
   
   # Check CODEOWNERS file
-  codeowners = validate_file(repo, 'asdf')
+  codeowners = validate_file(repo, 'test-file')
   if codeowners == None:
     return
-
-  print(codeowners)
 
 if __name__ == "__main__":
   main()

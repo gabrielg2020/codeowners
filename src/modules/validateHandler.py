@@ -34,5 +34,5 @@ def validate_file(r: Repository, file_name: str) -> list[ContentFile] | ContentF
     file = r.get_contents(file_name)
     return file
   except GithubException as e:
-    print(f'Failed to find CODEOWNERS file: {e.data['message']}')
+    print(f'Failed to find file: {e.data['message']}')
     return None

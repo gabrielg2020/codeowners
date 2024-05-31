@@ -6,20 +6,22 @@ from modules import validate_api_token, validate_org_username, validate_github_r
 # --- Auth Variables ---
 token = str(os.getenv("GH_API_TOKEN"))
 auth = Auth.Token(token)
+gh_instance = Github(auth=auth)
 
 # --- Variables Used To Test ---
+login_name = "gabrielg2020"
 org_name = "codeowners-rfc-test"
 repo_name = "testing-repo"
 file_name = "test-file"
 
-gh_instance = Github(auth=auth)
+login = gh_instance.get_user().login
 org = gh_instance.get_organization(org_name)
 repo = org.get_repo(repo_name)
 file = repo.get_contents(file_name)
 
-def test_validate_api_token() -> None:
+def test_validate_api_token() -> None: # This makes API calls to test if token is valid
   # Given a valid API token
-  assert validate_api_token(token).get_user() == gh_instance.get_user() # type: ignore
+  assert validate_api_token(token).get_user().login == login_name # type: ignore
   # Given an invalid API token
   assert validate_api_token('non_valid_api_token') == None
 
