@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import initialise_api, get_codeowners_history_file, get_file
+from modules import initialise_api, get_codeowners_history_file, get_members
 
 def main() -> None:
   # Load .env values
@@ -17,7 +17,7 @@ def main() -> None:
   
   g, org, repo = initialise_result
 
-  print(get_codeowners_history_file(repo))
+  print(get_members(org))
 
 if __name__ == "__main__":
   main()
