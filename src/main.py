@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import initialise_api, get_codeowners_history_file, get_members
+from modules import initialise_api, get_codeowners_history_file
 
 def main() -> None:
   # Load .env values

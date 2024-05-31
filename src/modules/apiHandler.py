@@ -109,3 +109,17 @@ def get_members(o: Organization) ->  tuple[str] | None:
   except Exception as e:
     print(f'Exception has occurred: {e}')
     return None
+
+def get_repos(o: Organization) ->  tuple[str] | None:
+  """Returns a tuple of repositories if Organisation is valid, else None."""
+  try:
+    repos = o.get_repos()
+    # Make sure the .github repo is not added into the tuple
+    repo_names = tuple(repo.name for repo in repos if repo.name != '.github')
+    return repo_names
+  except GithubException as e:
+    print(f'Failed to get repos: {e.data['message']}')
+    return None
+  except Exception as e:
+    print(f'Exception has occurred: {e}')
+    return None
