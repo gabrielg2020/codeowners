@@ -18,10 +18,13 @@ def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | Non
 
   return g, org, repo
 
-def get_codeowners_file(r: Repository) -> str | None:
-  """Returns the contents of the CODEOWNERS file"""
+def get_codeowners_history_file(r: Repository) -> str | None:
+  """Returns the contents of the co_history.json file"""
   try:
-    file_contents = get_file(r, 'CODEOWNERS')
+    file_contents = get_file(r, 'co_history.json')
+    if file_contents is None:
+      return
+    
     codeowners_content = file_contents.decoded_content.decode("utf-8")
     return codeowners_content
   except UnknownObjectException:
