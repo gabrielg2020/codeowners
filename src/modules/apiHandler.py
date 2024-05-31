@@ -19,15 +19,20 @@ def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | Non
 
   return g, org, repo
 
-def get_codeowners_history_file(r: Repository):
+def get_codeowners_history_file(r: Repository) -> dict | None:
   """Returns the contents of the co_history.json file"""
   try:
     file_contents = get_file(r, 'co_history.json')
     if file_contents is None:
-      return
+      return None
     
-    codeowners_content = file_contents.decoded_content.decode("utf-8")
-    return json.loads(codeowners_content)
+    try:
+      codeowners_content = file_contents.decoded_content.decode("utf-8")
+      codeowners_content = json.loads(codeowners_content)
+      return codeowners_content
+    except Exception as e:
+      print(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data['message']}')
+      return None
   except UnknownObjectException:
     # Create codeowners_history.json
     pass
