@@ -21,9 +21,9 @@ def validate_org_username(g: Github, username: str) -> Organization | None:
     print(f"Failed to find organisation: {e.data['message']}")
     return None
 
-def validate_github_repo(org: Organization) -> Repository | None:
+def validate_github_repo(org: Organization, repo_name: str) -> Repository | None:
   try:
-    repo = org.get_repo(".github")
+    repo = org.get_repo(repo_name)
     return repo
   except GithubException as e:
     print(f"Failed to find .github repo: {e.data['message']}")
