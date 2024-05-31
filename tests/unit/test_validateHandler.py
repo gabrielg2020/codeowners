@@ -21,7 +21,7 @@ file = repo.get_contents(file_name)
 
 def test_get_github_instance() -> None: # This makes API calls to test if token is valid
   # Given a valid API token
-  assert get_github_instance(token).get_user().login == login_name # type: ignore
+  assert get_github_instance(token).get_user().login == login_name
   # Given an invalid API token
   assert get_github_instance('non_valid_api_token') is None
 
@@ -42,3 +42,5 @@ def test_get_file() -> None:
   assert get_file(repo, file_name) == file
   # Given an invalid file within repo
   assert get_file(repo, "non_valid_file_name") is None
+  # Given a directory name within repo
+  assert get_file(repo, "test-dir") is None
