@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules import initialise_api
+from modules import initialise_api, get_codeowners_file
 
 def main() -> None:
   # Load .env values
@@ -14,9 +14,9 @@ def main() -> None:
   if initialise_result is None:
     print("Initalisation failed. Please check your token, organisation name, or repository name")
     return
-  else:
-    g, org, repo = initialise_result
-
+  
+  g, org, repo = initialise_result
+  print(get_codeowners_file(repo))
 
 if __name__ == "__main__":
   main()

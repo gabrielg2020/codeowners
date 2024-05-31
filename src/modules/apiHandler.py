@@ -1,4 +1,4 @@
-from github import Github, GithubException, Auth
+from github import Github, GithubException, UnknownObjectException, Auth
 from github.Organization import Organization
 from github.Repository import Repository
 from github.ContentFile import ContentFile
@@ -6,17 +6,29 @@ from github.ContentFile import ContentFile
 def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | None, Organization | None, Repository | None] | None:
   """Initialises GitHub API and returns instances of GitHub, Organisation and Repository."""
   g = get_github_instance(token)
-  if g == None:
+  if g is None:
     return None
   org = get_organisation(g, org_name)
-  if org == None:
+  if org is None:
     return None
   # Check .github repo
   repo = get_repo(org, repo_name)
-  if repo == None:
+  if repo is None:
     return None
 
   return g, org, repo
+
+def get_codeowners_file(r: Repository) -> str | None:
+  """Returns the contents of the CODEOWNERS file"""
+  try:
+    file_contents = get_file(r, 'CODEOWNERS')
+    codeowners_content = file_contents.decoded_content.decode("utf-8")
+    return codeowners_content
+  except UnknownObjectException:
+    # CREATE CODEOWNERS FILE
+    pass
+  except GithubException as e:
+    print(f"Error encountered: {e.data['message']}")
 
 def get_github_instance(token: str) -> Github | None:
   """Returns a GitHub instance if token is valid, else None."""
@@ -52,7 +64,7 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
   try:
     file = r.get_contents(file_name)
     # Check if file_name is the name of a directory
-    if isinstance(file, list[ContentFile]):
+    if isinstance(file, list):
       return None
     
     return file
