@@ -1,3 +1,4 @@
+import json
 from github import Github, GithubException, UnknownObjectException, Auth
 from github.Organization import Organization
 from github.Repository import Repository
@@ -18,7 +19,7 @@ def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | Non
 
   return g, org, repo
 
-def get_codeowners_history_file(r: Repository) -> str | None:
+def get_codeowners_history_file(r: Repository):
   """Returns the contents of the co_history.json file"""
   try:
     file_contents = get_file(r, 'co_history.json')
@@ -26,7 +27,7 @@ def get_codeowners_history_file(r: Repository) -> str | None:
       return
     
     codeowners_content = file_contents.decoded_content.decode("utf-8")
-    return codeowners_content
+    return json.loads(codeowners_content)
   except UnknownObjectException:
     # Create codeowners_history.json
     pass
