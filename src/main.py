@@ -2,7 +2,7 @@ import os
 from github import Github
 from dotenv import load_dotenv
 from modules.apiHandler import initialise_api, get_codeowners_history_file, get_members, get_repos
-from modules.shuffler import shuffle_members
+from modules.shuffler import shuffle_members_current_repos
 
 def main() -> None:
   # Load .env values
@@ -22,7 +22,7 @@ def main() -> None:
   repos = get_repos(org)
   co_history = get_codeowners_history_file(repo)
 
-  print(shuffle_members(members, repos, co_history))
+  print(shuffle_members_current_repos(members, repos, co_history['developers']))
 
 if __name__ == "__main__":
   main()

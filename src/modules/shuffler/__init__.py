@@ -1,3 +1,3 @@
-from .shuffler import shuffle_members
+from .shuffler import shuffle_members_current_repos
 
-__all__ = ['shuffle_members']
+__all__ = ['shuffle_members_current_repos']
