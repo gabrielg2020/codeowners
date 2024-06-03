@@ -49,6 +49,10 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
 def get_new_repo(developer: dict, all_repos: list, assigned_repos: set) -> str:
   """Returns a new_repo based of data in co_history"""
   try:
+    if isinstance(all_repos, str):
+      # Stops strings being indexed like a list
+      return None
+    
     # Removes repos from all_repos that are in developer['repos']
     available_repos = [repo for repo in all_repos if repo not in developer['repos']]
     if available_repos == []:
