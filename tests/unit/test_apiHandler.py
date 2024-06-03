@@ -89,12 +89,12 @@ def test_validate_co_history_file() -> None:
   # Given a valid co_history file
   assert validate_co_history_file(co_history_file) == co_history_file_contents
   # Given a valid json file but invalid co_history file
-  assert validate_co_history_file(valid_json_file) == None
+  assert validate_co_history_file(valid_json_file) is None
   # Given a invalid json
-  assert validate_co_history_file(invalid_json_file) == None
+  assert validate_co_history_file(invalid_json_file) is None
   # Give a invalid co_history file by not having correct keys
-  assert validate_co_history_file(invalid_key_co_history_file) == None
+  assert validate_co_history_file(invalid_key_co_history_file) is None
   # Give a invalid co_history file by not having correct types
-  assert validate_co_history_file(invalid_type_co_history_file) == None
+  assert validate_co_history_file(invalid_type_co_history_file) is None
   # Give a invalid co_history file by not having correct "repos" types
-  assert validate_co_history_file(invalid_list_co_history_file) == None
+  assert validate_co_history_file(invalid_list_co_history_file) is None
