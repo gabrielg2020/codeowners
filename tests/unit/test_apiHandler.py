@@ -1,7 +1,7 @@
 import os
 import pytest
 from github import Github, Auth
-from modules import get_github_instance, get_organisation, get_repo, get_file, get_members, get_repos
+from modules.apiHandler import get_github_instance, get_organisation, get_repo, get_file, get_members, get_repos
 
 # --- Auth Variables ---
 token = str(os.getenv('GH_API_TOKEN'))
