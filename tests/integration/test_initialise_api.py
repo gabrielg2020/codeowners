@@ -29,13 +29,13 @@ def test_initialise_api_with_all_invalid_variables() -> None:
   assert initialise_api(invalid_token, invalid_org_username, invalid_repo_name) == None
 
 def test_initialise_api_with_invalid_token() -> None:
-  # Given all invalid token
+  # Given with an invalid token
   assert initialise_api(invalid_token, valid_org_username, valid_repo_name) == None
 
 def test_initialise_api_with_invalid_org_username() -> None:
-  # Given all invalid org_username
+  # Given with an invalid org_username
   assert initialise_api(valid_token, invalid_org_username, valid_repo_name) == None
 
 def test_initialise_api_with_invalid_repo_name() -> None:
-  # Given all invalid repo_name
+  # Given with an invalid repo_name
   assert initialise_api(valid_token, valid_org_username, invalid_repo_name) == None
