@@ -22,7 +22,7 @@ def main() -> None:
   repos = get_repos(org)
   co_history = get_codeowners_history_file(repo)
 
-  print(shuffle_members(members, repos))
+  print(shuffle_members(members, repos, co_history))
 
 if __name__ == "__main__":
   main()
