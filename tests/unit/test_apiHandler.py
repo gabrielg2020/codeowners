@@ -12,12 +12,12 @@ gh_instance = Github(auth=auth)
 login_name = 'gabrielg2020'
 org_name = 'codeowners-rfc-test'
 repo_name = 'testing-repo'
-file_name = 'test-file'
+file_name = 'test_file'
 members = ['gabrielg2020', 'testacc03']
 repos = ['cool-project', 'facebook2', 'testing-repo']
 valid_json_file_name = 'valid.json'
 invalid_json_file_name = 'invalid.json'
-co_history_file_name = 'co_history.json'
+co_history_file_name = 'valid_co_history.json'
 
 login = gh_instance.get_user().login
 org = gh_instance.get_organization(org_name)
@@ -38,7 +38,6 @@ co_history_file_contents = {
     }
   ]
 }
-
 
 def test_get_github_instance() -> None: # This makes API calls to test if token is valid
   # Given a valid API token
