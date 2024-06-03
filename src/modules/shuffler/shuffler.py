@@ -6,7 +6,8 @@ def shuffle_members_current_repos(members: list, repos: list, developers: dict):
   
   # Add members that don't exist in developers
   developers = add_members_to_developers(members, developers)
-  if developers is None
+  if developers is None:
+    return None
 
   # Sort by the least amount of times as a co
   sorted_developers = sorted(developers, key=lambda dev: dev['number_of_times_co'])
@@ -14,6 +15,8 @@ def shuffle_members_current_repos(members: list, repos: list, developers: dict):
   # Assign repos to developers
   for developer in sorted_developers:
     new_repo = get_new_repo(developer, repos, assigned_repos)
+    if new_repo is None:
+      return None
 
     if new_repo not in developer['repos']:
       # Only add repos that weren't there before
@@ -26,6 +29,10 @@ def shuffle_members_current_repos(members: list, repos: list, developers: dict):
 def add_members_to_developers(members: list, developers: list) -> list[dict]:
   """Returns a list of all members as developers"""
   try:
+    if isinstance(members, str) or isinstance(developers, str):
+      # Stops strings being indexed like a list
+      return None
+
     for member in members:
       if not any(developer['acc_name'] == member for developer in developers):
         developers.append({
