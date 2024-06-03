@@ -14,5 +14,8 @@ def shuffle_members(members: list, repos: list, co_history: dict) -> dict[str, l
         "repos": []
       })
 
-  return developers
+  # Sort by the least amount of times as co
+  sorted_developers = sorted(developers, key=lambda dev: dev["number_of_times_co"])
+
+  return sorted_developers
 
