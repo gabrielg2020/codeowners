@@ -19,10 +19,10 @@ def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | Non
 
   return g, org, repo
 
-def get_codeowners_history_file(r: Repository) -> dict | None:
+def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json') -> dict | None:
   """Returns the contents of the co_history.json file"""
   try:
-    file_contents = get_file(r, 'co_history.json')
+    file_contents = get_file(r, file_name)
     if file_contents is None:
       # Create codeowners_history.json
       pass
