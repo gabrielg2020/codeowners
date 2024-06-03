@@ -13,8 +13,8 @@ login_name = 'gabrielg2020'
 org_name = 'codeowners-rfc-test'
 repo_name = 'testing-repo'
 file_name = 'test-file'
-members = ('gabrielg2020', 'testacc03')
-repos = ('cool-project', 'facebook2', 'testing-repo')
+members = ['gabrielg2020', 'testacc03']
+repos = ['cool-project', 'facebook2', 'testing-repo']
 
 login = gh_instance.get_user().login
 org = gh_instance.get_organization(org_name)
