@@ -24,8 +24,9 @@ def get_codeowners_history_file(r: Repository) -> dict | None:
   try:
     file_contents = get_file(r, 'co_history.json')
     if file_contents is None:
-      return None
-    
+      # Create codeowners_history.json
+      pass
+
     try:
       codeowners_content = file_contents.decoded_content.decode("utf-8")
       codeowners_content = json.loads(codeowners_content)
