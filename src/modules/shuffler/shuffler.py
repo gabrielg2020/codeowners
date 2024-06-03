@@ -8,7 +8,7 @@ def shuffle_members_current_repos(members: list, repos: list, developers: dict):
   developers = add_members_to_developers(members, developers)
 
   # Sort by the least amount of times as a co
-  sorted_developers = sorted(developers, key=lambda dev: dev["number_of_times_co"])
+  sorted_developers = sorted(developers, key=lambda dev: dev['number_of_times_co'])
 
   # Assign repos to developers
   for developer in sorted_developers:
@@ -27,10 +27,10 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
   for member in members:
     if not any(developer['acc_name'] == member for developer in developers):
       developers.append({
-        "acc_name": member,
-        "number_of_times_co": 0,
-        "current_repo": '',
-        "repos": []
+        'acc_name': member,
+        'number_of_times_co': 0,
+        'current_repo': '',
+        'repos': []
       })
 
   return developers

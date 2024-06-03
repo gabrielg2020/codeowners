@@ -37,7 +37,7 @@ def get_codeowners_history_file(r: Repository) -> dict | None:
     # Create codeowners_history.json
     pass
   except GithubException as e:
-    print(f"Error encountered: {e.data['message']}")
+    print(f'Error encountered: {e.data['message']}')
     return None
   except Exception as e:
     print(f'Exception has occurred: {e}')
@@ -51,7 +51,7 @@ def get_github_instance(token: str) -> Github | None:
     g.get_user().login # Will fail if bad credentials  
     return g
   except GithubException as e:
-    print(f"Failed to authenticate: {e.data['message']}")
+    print(f'Failed to authenticate: {e.data['message']}')
     return None
   except Exception as e:
     print(f'Exception has occurred: {e}')
@@ -63,7 +63,7 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
     org = g.get_organization(org_name)
     return org
   except GithubException as e:
-    print(f"Failed to find organisation: {e.data['message']}")
+    print(f'Failed to find organisation: {e.data['message']}')
     return None
   except Exception as e:
     print(f'Exception has occurred: {e}')
@@ -75,7 +75,7 @@ def get_repo(org: Organization, repo_name: str) -> Repository | None:
     repo = org.get_repo(repo_name)
     return repo
   except GithubException as e:
-    print(f"Failed to find .github repo: {e.data['message']}")
+    print(f'Failed to find .github repo: {e.data['message']}')
     return None
   except Exception as e:
     print(f'Exception has occurred: {e}')
