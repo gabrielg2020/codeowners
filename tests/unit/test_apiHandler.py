@@ -18,6 +18,9 @@ repos = ['cool-project', 'facebook2', 'testing-repo']
 valid_json_file_name = 'valid.json'
 invalid_json_file_name = 'invalid.json'
 co_history_file_name = 'valid_co_history.json'
+invalid_key_co_history_file_name = 'invalid_key_co_history.json'
+invalid_type_co_history_file_name = 'invalid_type_co_history.json'
+invalid_list_co_history_file_name = 'invalid_list_co_history.json'
 
 login = gh_instance.get_user().login
 org = gh_instance.get_organization(org_name)
@@ -38,6 +41,9 @@ co_history_file_contents = {
     }
   ]
 }
+invalid_key_co_history_file = repo.get_contents(invalid_key_co_history_file_name)
+invalid_type_co_history_file = repo.get_contents(invalid_type_co_history_file_name)
+invalid_list_co_history_file = repo.get_contents(invalid_list_co_history_file_name)
 
 def test_get_github_instance() -> None: # This makes API calls to test if token is valid
   # Given a valid API token
@@ -86,3 +92,9 @@ def test_validate_co_history_file() -> None:
   assert validate_co_history_file(valid_json_file) == None
   # Given a invalid json
   assert validate_co_history_file(invalid_json_file) == None
+  # Give a invalid co_history file by not having correct keys
+  assert validate_co_history_file(invalid_key_co_history_file) == None
+  # Give a invalid co_history file by not having correct types
+  assert validate_co_history_file(invalid_type_co_history_file) == None
+  # Give a invalid co_history file by not having correct "repos" types
+  assert validate_co_history_file(invalid_list_co_history_file) == None
