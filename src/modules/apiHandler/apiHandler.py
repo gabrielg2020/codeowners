@@ -97,11 +97,11 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
     print(f'Exception has occurred: {e}')
     return None
   
-def get_members(o: Organization) ->  tuple[str] | None:
+def get_members(o: Organization) ->  list[str] | None:
   """Returns a tuple of members if Organisation is valid, else None."""
   try:
     members = o.get_members()
-    member_logins = tuple(member.login for member in members)
+    member_logins = list(member.login for member in members)
     return member_logins
   except GithubException as e:
     print(f'Failed to get members: {e.data['message']}')
@@ -110,12 +110,12 @@ def get_members(o: Organization) ->  tuple[str] | None:
     print(f'Exception has occurred: {e}')
     return None
 
-def get_repos(o: Organization) ->  tuple[str] | None:
+def get_repos(o: Organization) ->  list[str] | None:
   """Returns a tuple of repositories if Organisation is valid, else None."""
   try:
     repos = o.get_repos()
     # Make sure the .github repo is not added into the tuple
-    repo_names = tuple(repo.name for repo in repos if repo.name != '.github')
+    repo_names = list(repo.name for repo in repos if repo.name != '.github')
     return repo_names
   except GithubException as e:
     print(f'Failed to get repos: {e.data['message']}')
