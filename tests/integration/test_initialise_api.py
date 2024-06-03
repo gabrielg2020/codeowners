@@ -5,7 +5,7 @@ from modules.apiHandler import initialise_api, get_github_instance, get_organisa
 # --- Valid Variables ---
 valid_token = str(os.getenv('GH_API_TOKEN'))
 valid_org_username = 'codeowners-rfc-test'
-valid_repo_name = '.github'
+valid_repo_name = 'testing-repo'
 
 # --- Valid Returns ---
 gh_instance = get_github_instance(valid_token)
