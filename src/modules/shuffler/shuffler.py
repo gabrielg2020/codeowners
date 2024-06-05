@@ -1,70 +1,108 @@
 import random
 
-def shuffle_members_current_repos(members: list, repos: list, developers: dict):
+def shuffle_members_current_repos(members: list, repos: list, developers: list):
   """Changes all members current_repo, adds current_repo to repos list and increments number_of_times_co"""
-  assigned_repos = set()
+  if isinstance(members, str) or isinstance(repos, str):
+      # Stops strings being indexed like a list
+      return None
   
   # Add members that don't exist in developers
   developers = add_members_to_developers(members, developers)
   if developers is None:
     return None
 
-  # Sort by the least amount of times as a co
-  sorted_developers = sorted(developers, key=lambda dev: dev['number_of_times_co'])
+  # Sort developers by the repos they previously had
+  sorted_developers = sorted(developers, key=lambda dev: len(dev['repos']))
 
-  # Assign repos to developers
-  for developer in sorted_developers:
-    new_repo = get_new_repo(developer, repos, assigned_repos)
-    if new_repo is None:
-      return None
+  # Availability map
+  repo_availability = {repo: True for repo in repos}
 
-    if new_repo not in developer['repos']:
-      # Only add repos that weren't there before
-      developer['repos'].append(new_repo)
-    developer['current_repo'] = new_repo
-    developer['number_of_times_co'] += 1
+  distribution = []
+  unassigned = []
+
+  # Start backtracking from the first dev
+  backtrack(developers, repo_availability, 0, distribution, unassigned)
+
+  # Assign any remaining repos to the unassigned developers
+  for developer in unassigned:
+    optimal_repo = find_least_repeated_repo(developer, distribution, repos)
+    if optimal_repo:
+      distribution.append({'acc_name': developer['acc_name'], 'new_repo': optimal_repo})
+    else:
+      # If no optimal repo is found (all repos are perviously assigned), assign any fruit with the least counts
+      for repo in repos:
+        if repo_availability[repo]:
+          distribution.append({'acc_name': developer['acc_name'], 'new_repo': repo})
+          break
+
+  for entry in distribution:
+    print(f'{entry['acc_name']} gets {entry['new_repo']}')
 
   return sorted_developers
 
 def add_members_to_developers(members: list, developers: list) -> list[dict]:
   """Returns a list of all members as developers"""
-  try:
-    if isinstance(members, str) or isinstance(developers, str):
-      # Stops strings being indexed like a list
-      return None
-
-    for member in members:
-      if not any(developer['acc_name'] == member for developer in developers):
-        developers.append({
-          'acc_name': member,
-          'number_of_times_co': 0,
-          'current_repo': '',
-          'repos': []
-        })
-    return developers
-  except Exception as e:
-    print(f'Exception has occurred: {e}')
+  if isinstance(members, str) or isinstance(developers, str):
+    # Stops strings being indexed like a list
     return None
 
-def get_new_repo(developer: dict, all_repos: list, assigned_repos: set) -> str:
+  for member in members:
+    if not any(developer['acc_name'] == member for developer in developers):
+      developers.append({
+        'acc_name': member,
+        'number_of_times_co': 0,
+        'current_repo': '',
+        'repos': []
+      })
+  return developers
+
+def get_new_repo(developer: dict, repos: list) -> str:
   """Returns a new_repo based of data in co_history"""
-  try:
-    if isinstance(all_repos, str):
-      # Stops strings being indexed like a list
-      return None
-    
-    # Removes repos from all_repos that are in developer['repos']
-    available_repos = [repo for repo in all_repos if repo not in developer['repos']]
-    if available_repos == []:
-      # If there are no available repos pick from any of them
-      assigned_repos.clear()
-      available_repos = all_repos.copy()
-      available_repos.remove(developer['current_repo'])
+  pass
 
-    new_repo = random.choice(available_repos)
-    assigned_repos.add(new_repo)
+def backtrack(developers: list, repo_availability: dict, index: int, distribution: list, unassigned: list) -> bool:
+  """A recursive exploration algorithm. Returns a bool to determine if exploration is finished"""
+  # Recursive base case
+  if index == len(developers):
+    return True
+  
+  developer = developers[index]
+  assigned = False
+  for repo in repo_availability:
+    if repo_availability[repo] and is_valid_assignment(developer, repo):
+      # Assign the repo to the developer
+      distribution.append({'acc_name': developer['acc_name'], 'new_repo': repo})
+      repo_availability[repo] = False
+      assigned = True
 
-    return new_repo
-  except Exception as e:
-    print(f'Exception has occurred: {e}')
-    return None
+      # Recursively assign repos to the remaining developers
+      if backtrack(developers, repo_availability, index + 1, distribution, unassigned):
+        return True
+      
+      # Backtrack if assignment was not successful
+      distribution.pop()
+      repo_availability[repo] = True
+      assigned = False
+
+  if not assigned:
+    unassigned.append(developer)
+    return backtrack(developers, repo_availability, index + 1, distribution, unassigned)
+
+  return False
+
+def is_valid_assignment(developer: dict, repo: str) -> bool:
+  """Returns bool determining if a repo is valid for assignment"""
+  return repo not in developer['repos']
+
+def find_least_repeated_repo(developer: dict, distribution: list, repos: list) -> str | None:
+  """Uses a 'greedy' approach. Returns the least repeated repository"""
+  repo_count = {repo: 0 for repo in repos}
+  for entry in distribution:
+    repo_count[entry['new_repo']] += 1
+  least_repeated_repo = None
+  min_count = float('inf')
+  for repo, count in repo_count.items():
+    if repo not in developer['repos'] and count < min_count:
+      least_repeated_repo = repo
+      min_count = count
+  return least_repeated_repo

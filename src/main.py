@@ -22,7 +22,47 @@ def main() -> None:
   repos = get_repos(org)
   co_history = get_codeowners_history_file(repo)
 
-  print(shuffle_members_current_repos(members, repos, co_history['developers']))
+#   test = [{
+#     'acc_name':'test_acc_1',
+#     'number_of_times_co': 3,
+#     'current_repo': 'testing_repo_1',
+#     'repos': [
+#       'testing_repo_1',
+#       'testing_repo_2',
+#       'testing_repo_3']
+#   }, {
+#     'acc_name':'test_acc_2',
+#     'number_of_times_co': 2,
+#     'current_repo': 'testing_repo_2',
+#     'repos': [
+#       'testing_repo_2',
+#       'testing_repo_4']
+#   }, {
+#     'acc_name':'test_acc_3',
+#     'number_of_times_co': 4,
+#     'current_repo': 'testing_repo_3',
+#     'repos': [
+#       'testing_repo_1',
+#       'testing_repo_2',
+#       'testing_repo_3',
+#       'testing_repo_4']
+#   }, {
+#     'acc_name':'test_acc_4',
+#     'number_of_times_co': 1,
+#     'current_repo': 'testing_repo_4',
+#     'repos': [
+#       'testing_repo_2']
+#   }
+# ]
+  
+#   repos = [
+#     'testing_repo_1', 
+#     'testing_repo_2',
+#     'testing_repo_3',
+#     'testing_repo_4'
+#   ]
+
+  shuffle_members_current_repos(members, repos, co_history['developers'])
 
 if __name__ == '__main__':
   main()
