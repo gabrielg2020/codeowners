@@ -12,8 +12,33 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list):
     return None
 
   # Sort developers by the repos they previously had
-  sorted_developers = sorted(developers, key=lambda dev: len(dev['repos']))
+  developers.sort(key=lambda dev: len(dev['repos']))
 
+  distribution = get_developer_repo_distribution(developers, repos)
+
+  for entry in distribution:
+    print(f'{entry['acc_name']} gets {entry['new_repo']}')
+
+  return developers
+
+def add_members_to_developers(members: list, developers: list) -> list[dict]:
+  """Returns a list of all members as developers"""
+  if isinstance(members, str) or isinstance(developers, str):
+    # Stops strings being indexed like a list
+    return None
+
+  for member in members:
+    if not any(developer['acc_name'] == member for developer in developers):
+      developers.append({
+        'acc_name': member,
+        'number_of_times_co': 0,
+        'current_repo': '',
+        'repos': []
+      })
+  return developers
+
+def get_developer_repo_distribution(developers: list, repos: list) -> list:
+  """Returns the distribution based of data in developers and repos"""
   # Availability map
   repo_availability = {repo: True for repo in repos}
 
@@ -35,30 +60,7 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list):
           distribution.append({'acc_name': developer['acc_name'], 'new_repo': repo})
           break
 
-  for entry in distribution:
-    print(f'{entry['acc_name']} gets {entry['new_repo']}')
-
-  return sorted_developers
-
-def add_members_to_developers(members: list, developers: list) -> list[dict]:
-  """Returns a list of all members as developers"""
-  if isinstance(members, str) or isinstance(developers, str):
-    # Stops strings being indexed like a list
-    return None
-
-  for member in members:
-    if not any(developer['acc_name'] == member for developer in developers):
-      developers.append({
-        'acc_name': member,
-        'number_of_times_co': 0,
-        'current_repo': '',
-        'repos': []
-      })
-  return developers
-
-def get_new_repo(developer: dict, repos: list) -> str:
-  """Returns a new_repo based of data in co_history"""
-  pass
+  return distribution
 
 def backtrack(developers: list, repo_availability: dict, index: int, distribution: list, unassigned: list) -> bool:
   """A recursive exploration algorithm. Returns a bool to determine if exploration is finished"""
