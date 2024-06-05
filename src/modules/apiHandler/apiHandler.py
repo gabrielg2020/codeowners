@@ -1,8 +1,13 @@
 import json
-from github import Github, GithubException, UnknownObjectException, Auth
+import logging
+from github import Github, GithubException, Auth
 from github.Organization import Organization
 from github.Repository import Repository
 from github.ContentFile import ContentFile
+
+# Setting up logging package
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | None, Organization | None, Repository | None] | None:
   """Initialises GitHub API and returns instances of GitHub, Organisation and Repository."""
@@ -25,7 +30,7 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     # Check if file exists
     file_contents = get_file(r, file_name)
     if file_contents is None:
-      print(f'Cannot find {file_name}, creating a base history file')
+      logger.info(f'Cannot find {file_name}, creating a base history file.')
       return {'developers': []}
     
     # Validate file
@@ -33,10 +38,10 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     return codeowners_content
 
   except GithubException as e:
-    print(f'Error encountered: {e.data['message']}')
+    logger.error(f'Error encountered: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
 
 def get_github_instance(token: str) -> Github | None:
@@ -47,10 +52,10 @@ def get_github_instance(token: str) -> Github | None:
     g.get_user().login # Will fail if bad credentials  
     return g
   except GithubException as e:
-    print(f'Failed to authenticate: {e.data['message']}')
+    logger.error(f'Failed to authenticate: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
 
 def get_organisation(g: Github, org_name: str) -> Organization | None:
@@ -59,10 +64,10 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
     org = g.get_organization(org_name)
     return org
   except GithubException as e:
-    print(f'Failed to find organisation: {e.data['message']}')
+    logger.error(f'Failed to find organisation: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
 
 def get_repo(org: Organization, repo_name: str) -> Repository | None:
@@ -71,10 +76,10 @@ def get_repo(org: Organization, repo_name: str) -> Repository | None:
     repo = org.get_repo(repo_name)
     return repo
   except GithubException as e:
-    print(f'Failed to find .github repo: {e.data['message']}')
+    logger.error(f'Failed to find .github repo: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
   
 def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile | None:
@@ -83,14 +88,15 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
     file = r.get_contents(file_name)
     # Check if file_name is the name of a directory
     if isinstance(file, list):
+      logger.info(f'{file_name} is a directory not a file.')
       return None
     
     return file
   except GithubException as e:
-    print(f'Failed to find file: {e.data['message']}')
+    logger.error(f'Failed to find file: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
   
 def get_members(o: Organization) ->  list[str] | None:
@@ -100,10 +106,10 @@ def get_members(o: Organization) ->  list[str] | None:
     member_logins = list(member.login for member in members)
     return member_logins
   except GithubException as e:
-    print(f'Failed to get members: {e.data['message']}')
+    logger.error(f'Failed to get members: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
 
 def get_repos(o: Organization) ->  list[str] | None:
@@ -114,10 +120,10 @@ def get_repos(o: Organization) ->  list[str] | None:
     repo_names = list(repo.name for repo in repos if repo.name != '.github')
     return repo_names
   except GithubException as e:
-    print(f'Failed to get repos: {e.data['message']}')
+    logger.error(f'Failed to get repos: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None
   
 def validate_co_history_file(file_contents) -> dict:
@@ -127,11 +133,11 @@ def validate_co_history_file(file_contents) -> dict:
       codeowners_content = file_contents.decoded_content.decode("utf-8")
       codeowners_content = json.loads(codeowners_content)
     except Exception as e:
-      print(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data['message']}')
+      logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data['message']}')
       return None
     
     if 'developers' not in codeowners_content or not isinstance(codeowners_content['developers'], list):
-      print(f'.json does not have a "developers" list')
+      logger.error(f'.json does not have a "developers" list')
       return None
     
     # Check if file follows co_history.json formatting
@@ -145,23 +151,23 @@ def validate_co_history_file(file_contents) -> dict:
     for developer in codeowners_content['developers']:
       # Check if keys are present
       if not all(key in developer for key in required_keys_types):
-        print(f'"developers" does not have the correct keys.')
+        logger.error(f'"developers" does not have the correct keys.')
         return None
       
       # Check if keys have correct type
       for key, expected_type in required_keys_types.items():
         if not isinstance(developer[key], expected_type):
-          print(f'"developers" keys does not have the correct types.')
+          logger.error(f'"developers" keys does not have the correct types.')
           return None
         # Check that repos list is strings
         if key == 'repos' and not all(isinstance(item, str) for item in developer[key]):
-          print(f'"developers" "repos" list is not fully populated with string types.')
+          logger.error(f'"developers" "repos" list is not fully populated with string types.')
           return None
       
     return codeowners_content
   except GithubException as e:
-    print(f'Failed to get repos: {e.data['message']}')
+    logger.error(f'Failed to get repos: {e.data['message']}')
     return None
   except Exception as e:
-    print(f'Exception has occurred: {e}')
+    logger.error(f'Exception has occurred: {e}')
     return None

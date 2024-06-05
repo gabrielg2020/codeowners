@@ -20,7 +20,7 @@ def main() -> None:
 
   members = get_members(org)
   repos = get_repos(org)
-  co_history = get_codeowners_history_file(repo)
+  co_history = get_codeowners_history_file(repo, 'hello')
 
 #   test = [{
 #     'acc_name':'test_acc_1',

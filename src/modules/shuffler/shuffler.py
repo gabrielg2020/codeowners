@@ -11,9 +11,6 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list):
   if developers is None:
     return None
 
-  # Sort developers by the repos they previously had
-  developers.sort(key=lambda dev: len(dev['repos']))
-
   distribution = get_developer_repo_distribution(developers, repos)
 
   for entry in distribution:
@@ -39,6 +36,9 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
 
 def get_developer_repo_distribution(developers: list, repos: list) -> list:
   """Returns the distribution based of data in developers and repos"""
+  # Sort developers by the repos they previously had
+  developers.sort(key=lambda dev: len(dev['repos']))
+  
   # Availability map
   repo_availability = {repo: True for repo in repos}
 
