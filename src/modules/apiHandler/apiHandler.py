@@ -25,10 +25,7 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     # Check if file exists
     file_contents = get_file(r, file_name)
     if file_contents is None:
-<<<<<<< HEAD
-=======
       print(f'Cannot find {file_name}, creating a base history file')
->>>>>>> 2a2aee2 (fix(apiHandler): if no co_history found, create an empty one)
       return {'developers': []}
     
     # Validate file
