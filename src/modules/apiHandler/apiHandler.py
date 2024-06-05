@@ -25,7 +25,7 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     # Check if file exists
     file_contents = get_file(r, file_name)
     if file_contents is None:
-      return None
+      return {'developers': []}
     
     # Validate file
     codeowners_content = validate_co_history_file(file_contents)
