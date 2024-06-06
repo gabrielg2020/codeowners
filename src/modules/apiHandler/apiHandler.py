@@ -63,6 +63,9 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
   except GithubException as e:
     logger.error(f'Failed to find organisation: {e.data['message']}')
     return None
+  except Exception as e:
+    logger.error(f'Exception has occurred: {e}')
+    return None
 
 def get_repo(org: Organization, repo_name: str) -> Repository | None:
   """Returns a Repository instance if repo_name is valid, else None."""

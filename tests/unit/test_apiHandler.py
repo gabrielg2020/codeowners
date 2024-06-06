@@ -10,27 +10,44 @@ from modules.apiHandler import (
 
 # --- get_github_instance ---
 def test_get_github_instance_valid_token(valid_github) -> None:
-  """Test successful GitHub authentication"""
+  """Test GitHub authentication with valid token"""
   assert valid_github is not None
 
 def test_get_github_instance_invalid_token(invalid_github) -> None:
-  """Test GitHub authentication with bad credentials"""
+  """Test GitHub authentication with invalid token"""
   assert invalid_github is None
 
 # --- get_organisation ---
 def test_get_organisation_valid_name(valid_organisation) -> None:
-  """Test successful organisation grabbing"""
+  """Test organisation grabbing with valid organisation name"""
   assert valid_organisation is not None
 
 def test_get_organisation_invalid_name(invalid_organisation) -> None:
-  """Test organisation grabbing with wrong organisation name"""
+  """Test organisation grabbing with invalid organisation name"""
   assert invalid_organisation is None
 
 # --- get_repos ---
 def test_get_repos_valid_organisation(valid_organisation) -> None:
-  """Test successful repos grabbing"""
+  """Test repos grabbing with valid organisation"""
   assert get_repos(valid_organisation) is not None
 
 def test_get_repos_invalid_organisation(invalid_organisation) -> None:
-  """Test repos grabbing with invalid instance of Organisation"""
+  """Test repos grabbing with invalid organisation"""
   assert get_repos(invalid_organisation) is None
+
+# --- get_repo ---
+def test_get_repo_valid_organisation_valid_repo_name(valid_organisation) -> None:
+  """Test repo grabbing with valid organisation & valid repo name"""
+  assert get_repo(valid_organisation, 'testing-repo') is not None
+
+def test_get_repo_valid_organisation_invalid_repo_name(valid_organisation) -> None:
+  """Test repo grabbing with valid organisation & invalid repo name"""
+  assert get_repo(valid_organisation, 'invalid_repo_name') is None
+
+def test_get_repo_invalid_organisation_valid_repo_name(invalid_organisation) -> None:
+  """Test repo grabbing with invalid organisation & valid repo name"""
+  assert get_repo(invalid_organisation, 'testing-repo') is None
+
+def test_get_repo_invalid_organisation_invalid_repo_name(invalid_organisation) -> None:
+  """Test repo grabbing with invalid organisation & invalid repo name"""
+  assert get_repo(invalid_organisation, 'invalid_repo_name') is None
