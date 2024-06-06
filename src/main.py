@@ -22,6 +22,8 @@ def main() -> None:
   repos = get_repos(org)
   co_history = get_codeowners_history_file(repo, 'hello')
 
+  print(g.get_organization('codeowners-rfc-test').login)
+
   shuffle_members_current_repos(members, repos, co_history['developers'])
 
 if __name__ == '__main__':

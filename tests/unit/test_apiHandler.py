@@ -20,3 +20,11 @@ def test_get_github_instance_valid_token(valid_github) -> None:
 def test_get_github_instance_invalid_token(invalid_github) -> None:
   """Test GitHub authentication with bad credentials"""
   assert invalid_github is None
+
+def test_get_organisation_valid_name(valid_organisation) -> None:
+  """Test successful organisation grabbing"""
+  assert valid_organisation is not None
+
+def test_get_organisation_invalid_name(invalid_organisation) -> None:
+  """Test organisation grabbing with wrong organisation name"""
+  assert invalid_organisation is None
