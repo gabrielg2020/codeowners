@@ -7,7 +7,7 @@ from modules.apiHandler import (
   get_organisation
 )
 
-# --- In/Valid Fixtures ---
+# --- get_github_instance ---
 @pytest.fixture
 def valid_github():
   """Fixture to provide a valid Github instance"""
@@ -22,6 +22,7 @@ def invalid_github() -> Github | None:
   g = get_github_instance(invalid_token)
   return g
 
+# --- get_organisation ---
 @pytest.fixture
 def valid_organisation(valid_github) -> Organization | None:
   """Fixture to provide a valid Organisation"""
@@ -31,7 +32,21 @@ def valid_organisation(valid_github) -> Organization | None:
 
 @pytest.fixture
 def invalid_organisation(valid_github) -> Organization | None:
-  """Fixture to provide an invalid Organisation"""
+  """Fixture to provide an invalid Organisation with invalid name"""
   invalid_org_name = 'invalid_org_name'
   org = get_organisation(valid_github, invalid_org_name)
+  return org
+
+@pytest.fixture
+def invalid_organisation_invalid_github_valid_name(invalid_github) -> Organization | None:
+  """Fixture to provide an invalid Organisation with invalid github"""
+  valid_org_name = 'codeowners-rfc-test'
+  org = get_organisation(invalid_github, valid_org_name)
+  return org
+
+@pytest.fixture
+def invalid_organisation_invalid_github_invalid_name(invalid_github) -> Organization | None:
+  """Fixture to provide an invalid Organisation with invalid github & invalid name"""
+  invalid_org_name = 'invalid_org_name'
+  org = get_organisation(invalid_github, invalid_org_name)
   return org

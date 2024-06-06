@@ -19,12 +19,20 @@ def test_get_github_instance_invalid_token(invalid_github) -> None:
 
 # --- get_organisation ---
 def test_get_organisation_valid_name(valid_organisation) -> None:
-  """Test organisation grabbing with valid organisation name"""
+  """Test organisation grabbing with valid github & valid organisation name"""
   assert valid_organisation is not None
 
-def test_get_organisation_invalid_name(invalid_organisation) -> None:
-  """Test organisation grabbing with invalid organisation name"""
+def test_get_organisation_valid_github_invalid_name(invalid_organisation) -> None:
+  """Test organisation grabbing with valid github & invalid organisation name"""
   assert invalid_organisation is None
+
+def test_get_organisation_invalid_github_valid_name(invalid_organisation_invalid_github_valid_name) -> None:
+  """Test organisation grabbing with invalid github & valid organisation name"""
+  assert invalid_organisation_invalid_github_valid_name is None
+
+def test_get_organisation_invalid_github_invalid_name(invalid_organisation_invalid_github_invalid_name) -> None:
+  """Test organisation grabbing with invalid github & invalid organisation name"""
+  assert invalid_organisation_invalid_github_invalid_name is None
 
 # --- get_repos ---
 def test_get_repos_valid_organisation(valid_organisation) -> None:
@@ -51,3 +59,5 @@ def test_get_repo_invalid_organisation_valid_repo_name(invalid_organisation) -> 
 def test_get_repo_invalid_organisation_invalid_repo_name(invalid_organisation) -> None:
   """Test repo grabbing with invalid organisation & invalid repo name"""
   assert get_repo(invalid_organisation, 'invalid_repo_name') is None
+
+
