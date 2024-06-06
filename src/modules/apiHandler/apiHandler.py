@@ -54,9 +54,6 @@ def get_github_instance(token: str) -> Github | None:
   except GithubException as e:
     logger.error(f'Failed to authenticate: {e.data['message']}')
     return None
-  except Exception as e:
-    logger.error(f'Exception has occurred: {e}')
-    return None
 
 def get_organisation(g: Github, org_name: str) -> Organization | None:
   """Returns a Organisation instance if org_name is valid, else None."""
