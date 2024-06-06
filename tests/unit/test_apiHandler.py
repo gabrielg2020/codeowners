@@ -50,6 +50,15 @@ def test_get_repo_invalid_organisation_invalid_repo_name(invalid_repo_invalid_or
   """Test repo grabbing with invalid Organisation & invalid repo name"""
   assert invalid_repo_invalid_org_invalid_name is None
 
+# --- get_members ---
+def test_get_members_valid_organisation(valid_organisation) -> None:
+  """Test members grabbing with valid Organisation"""
+  assert get_members(valid_organisation) is not None
+
+def test_get_members_invalid_organisation(invalid_organisation) -> None:
+  """Test members grabbing with invalid Organisation"""
+  assert get_members(invalid_organisation) is None
+
 # --- get_repos ---
 def test_get_repos_valid_organisation(valid_organisation) -> None:
   """Test repos grabbing with valid Organisation"""
@@ -89,3 +98,40 @@ def test_get_file_invalid_repository_valid_dir_name(invalid_repo) -> None:
   """Test file grabbing with invalid Repository & valid directory name"""
   valid_dir_name = 'test-dir'
   assert get_file(invalid_repo, valid_dir_name) is None
+
+# --- get_codeowners_history_file ---
+def test_get_codeowners_history_file_valid_repository_co_valid_name(valid_repo) -> None:
+  """Test codeowners-history grabbing with valid Repository & valid codeowners history name"""
+  valid_file_name = 'valid_co_history.json'
+  assert get_codeowners_history_file(valid_repo, valid_file_name) is not None
+
+def test_get_codeowners_history_file_valid_repository_invalid_name(valid_repo) -> None:
+  """Test codeowners-history grabbing with valid Repository & invalid name"""
+  invalid_file_name = 'invalid_file_name'
+  assert get_codeowners_history_file(valid_repo, invalid_file_name) == {'developers': []}
+
+def test_get_codeowners_history_file_invalid_repository_co_valid_name(invalid_repo) -> None:
+  """Test codeowners-history grabbing with invalid Repository & valid codeowners history name"""
+  valid_file_name = 'valid_co_history.json'
+  assert get_codeowners_history_file(invalid_repo, valid_file_name) is None
+
+def test_get_codeowners_history_file_invalid_repository_invalid_name(invalid_repo) -> None:
+  """Test codeowners-history grabbing with invalid Repository & invalid name"""
+  invalid_file_name = 'invalid_file_name'
+  assert get_codeowners_history_file(invalid_repo, invalid_file_name) is None
+
+def test_get_codeowners_history_file_valid_repository_invalid_co_names(valid_repo) -> None:
+  """Test codeowners-history grabbing with valid Repository & invalid codeowners history file names"""
+  invalid_co_names = ['invalid_key_co_history.json', 'invalid_type_co_history.json', 'invalid_list_co_history.json']
+  for invalid_co_name in invalid_co_names:
+    assert get_codeowners_history_file(valid_repo, invalid_co_name) is None
+
+def test_get_codeowners_history_file_invalid_repository_invalid_co_names(invalid_repo) -> None:
+  """Test codeowners-history grabbing with invalid Repository & invalid codeowners history file names"""
+  invalid_co_names = ['invalid_key_co_history.json', 'invalid_type_co_history.json', 'invalid_list_co_history.json']
+  for invalid_co_name in invalid_co_names:
+    assert get_codeowners_history_file(invalid_repo, invalid_co_name) is None
+
+
+# --- validate_co_history_file ---
+
