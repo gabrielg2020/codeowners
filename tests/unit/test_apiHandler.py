@@ -79,3 +79,13 @@ def test_get_file_invalid_repository_invalid_name(invalid_repo) -> None:
   """Test file grabbing with invalid Repository & invalid name"""
   invalid_file_name = 'invalid_file_name'
   assert get_file(invalid_repo, invalid_file_name) is None
+
+def test_get_file_valid_repository_valid_dir_name(valid_repo) -> None:
+  """Test file grabbing with valid Repository & valid directory name"""
+  valid_dir_name = 'test-dir'
+  assert get_file(valid_repo, valid_dir_name) is None
+
+def test_get_file_invalid_repository_valid_dir_name(invalid_repo) -> None:
+  """Test file grabbing with invalid Repository & valid directory name"""
+  valid_dir_name = 'test-dir'
+  assert get_file(invalid_repo, valid_dir_name) is None
