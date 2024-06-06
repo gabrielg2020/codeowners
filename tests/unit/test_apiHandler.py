@@ -1,8 +1,6 @@
 import pytest
 from modules.apiHandler import (
   get_codeowners_history_file,
-  get_github_instance, 
-  get_organisation,
   get_file,
   get_members,
   get_repos, 
@@ -28,3 +26,11 @@ def test_get_organisation_valid_name(valid_organisation) -> None:
 def test_get_organisation_invalid_name(invalid_organisation) -> None:
   """Test organisation grabbing with wrong organisation name"""
   assert invalid_organisation is None
+
+def test_get_repos_valid_organisation(valid_organisation) -> None:
+  """Test successful repos grabbing"""
+  assert get_repos(valid_organisation) is not None
+
+def test_get_repos_invalid_organisation(invalid_organisation) -> None:
+  """Test repos grabbing with invalid instance of Organisation"""
+  assert get_repos(invalid_organisation) is None

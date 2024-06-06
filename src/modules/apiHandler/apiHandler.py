@@ -63,9 +63,6 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
   except GithubException as e:
     logger.error(f'Failed to find organisation: {e.data['message']}')
     return None
-  except Exception as e:
-    logger.error(f'Exception has occurred: {e}')
-    return None
 
 def get_repo(org: Organization, repo_name: str) -> Repository | None:
   """Returns a Repository instance if repo_name is valid, else None."""
@@ -116,9 +113,6 @@ def get_repos(o: Organization) ->  list[str] | None:
     # Make sure the .github repo is not added into the tuple
     repo_names = list(repo.name for repo in repos if repo.name != '.github')
     return repo_names
-  except GithubException as e:
-    logger.error(f'Failed to get repos: {e.data['message']}')
-    return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
