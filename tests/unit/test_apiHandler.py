@@ -1,4 +1,5 @@
 import pytest
+import json
 from modules.apiHandler import (
   get_codeowners_history_file,
   get_file,
@@ -132,6 +133,136 @@ def test_get_codeowners_history_file_invalid_repository_invalid_co_names(invalid
   for invalid_co_name in invalid_co_names:
     assert get_codeowners_history_file(invalid_repo, invalid_co_name) is None
 
-
 # --- validate_co_history_file ---
+def test_validate_co_history_file_valid_json_valid_formatting() -> None:
+  """Test validate_co_history_file with a valid json file with valid co_history formatting"""
+  valid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  ]}
 
+  assert validate_co_history_file(json.dumps(valid_co_history)) == valid_co_history
+
+def test_validate_co_history_file_invalid_json() -> None:
+  """Test validate_co_history_file with an invalid json file"""
+  invalid_json = 'invalid_json'
+
+  assert validate_co_history_file(invalid_json) is None
+
+def test_validate_co_history_file_valid_json_no_dev_list() -> None:
+  """Test validate_co_history_file with an valid json file but no developers list"""
+  invalid_co_history= {
+    'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_no_acc_name() -> None:
+  """Test validate_co_history_file with an valid json file but no acc_name attribute"""
+  invalid_co_history = {'developers': [
+    {'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  ]}
+  
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_no_number_of_times_co() -> None:
+  """Test validate_co_history_file with an valid json file but no number_of_times_co attribute"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  ]}
+  
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_no_current_repo() -> None:
+  """Test validate_co_history_file with an valid json file but no current_repo attribute"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'repos': ['testing_repo_1']
+    }
+  ]}
+  
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_no_repos() -> None:
+  """Test validate_co_history_file with an valid json file but no repos attribute"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    }
+  ]}
+  
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_invalid_acc_name_type() -> None:
+  """Test validate_co_history_file with a valid json file with invalid acc_name type"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 1234,
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  ]}
+
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_invalid_number_of_times_co_type() -> None:
+  """Test validate_co_history_file with a valid json file with invalid number_of_times_co type"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': '1234',
+    'current_repo': 'testing_current_repo',
+    'repos': ['testing_repo_1']
+    }
+  ]}
+
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_invalid_current_repo_type() -> None:
+  """Test validate_co_history_file with a valid json file with invalid current_repo type"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 1234,
+    'repos': ['testing_repo_1']
+    }
+  ]}
+
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_invalid_repos_type() -> None:
+  """Test validate_co_history_file with a valid json file with invalid repos type"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': 1234
+    }
+  ]}
+
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None
+
+def test_validate_co_history_file_valid_json_invalid_repos_list_items_type() -> None:
+  """Test validate_co_history_file with a valid json file with invalid repos list items type"""
+  invalid_co_history = {'developers': [
+    {'acc_name': 'testing_acc',
+    'number_of_times_co': 2,
+    'current_repo': 'testing_current_repo',
+    'repos': ['string', 123, {'type': 'dict'}]
+    }
+  ]}
+
+  assert validate_co_history_file(json.dumps(invalid_co_history)) is None

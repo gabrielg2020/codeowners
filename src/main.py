@@ -1,7 +1,7 @@
 import os
 from github import Github
 from dotenv import load_dotenv
-from modules.apiHandler import initialise_api, get_codeowners_history_file, get_members, get_repos
+from modules.apiHandler import initialise_api, get_codeowners_history_file, get_members, get_repos, validate_co_history_file
 from modules.shuffler import shuffle_members_current_repos
 
 def main() -> None:  
@@ -20,11 +20,12 @@ def main() -> None:
 
   members = get_members(org)
   repos = get_repos(org)
-  co_history = get_codeowners_history_file(repo, 'hello')
+  co_history = get_codeowners_history_file(repo, 'co_history.json')
 
   print(g.get_organization('codeowners-rfc-test').login)
 
   shuffle_members_current_repos(members, repos, co_history['developers'])
+
 
 if __name__ == '__main__':
   main()

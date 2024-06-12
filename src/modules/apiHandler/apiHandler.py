@@ -131,7 +131,10 @@ def validate_co_history_file(file_contents) -> dict:
   try:
     # Check if file follows .json formatting
     try:
-      codeowners_content = file_contents.decoded_content.decode("utf-8")
+      if type(file_contents) == ContentFile:
+        codeowners_content = file_contents.decoded_content
+      else:
+        codeowners_content = file_contents
       codeowners_content = json.loads(codeowners_content)
     except Exception as e:
       logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data['message']}')
@@ -166,9 +169,6 @@ def validate_co_history_file(file_contents) -> dict:
           return None
       
     return codeowners_content
-  except GithubException as e:
-    logger.error(f'Failed to get repos: {e.data['message']}')
-    return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
