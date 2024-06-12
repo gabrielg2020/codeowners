@@ -31,7 +31,8 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
   if not isinstance(members, list) or not isinstance(developers, list):
     logger.error("'members' or 'developers' are not type list")
     return None
-
+  print(f'{members} + \n')
+  print(developers)
   for member in members:
     if not any(developer['acc_name'] == member for developer in developers):
       developers.append({
@@ -40,6 +41,8 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
         'current_repo': '',
         'repos': []
       })
+
+  
   return developers
 
 def get_developer_repo_distribution(developers: list, repos: list) -> list:

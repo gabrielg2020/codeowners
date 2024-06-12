@@ -6,7 +6,9 @@ import pytest
 from modules.apiHandler import (
   get_github_instance,
   get_organisation,
-  get_repo
+  get_repo,
+  get_members, 
+  get_codeowners_history_file
 )
 
 # --- get_github_instance ---
