@@ -1,9 +1,13 @@
-import random
+import logging
+
+# Setting up logging package
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def shuffle_members_current_repos(members: list, repos: list, developers: list) -> list | None:
   """Changes all members current_repo, adds current_repo to repos list and increments number_of_times_co"""
-  if isinstance(members, str) or isinstance(repos, str):
-      # Stops strings being indexed like a list
+  if not isinstance(members, list) or not isinstance(repos, list):
+      logger.error("'members' or 'repos' are not type list")
       return None
   
   # Add members that don't exist in developers
@@ -14,7 +18,7 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list) 
   distribution = get_developer_repo_distribution(developers, repos)
 
   # Update developers list
-  for i in range(len(developers) ):
+  for i in range(len(developers)):
     developers[i]['current_repo'] = distribution[i]['new_repo']
     developers[i]['repos'].append(distribution[i]['new_repo'])
     developers[i]['repos'] = list(set(developers[i]['repos']))
@@ -24,8 +28,8 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list) 
 
 def add_members_to_developers(members: list, developers: list) -> list[dict]:
   """Returns a list of all members as developers"""
-  if isinstance(members, str) or isinstance(developers, str):
-    # Stops strings being indexed like a list
+  if not isinstance(members, list) or not isinstance(developers, list):
+    logger.error("'members' or 'developers' are not type list")
     return None
 
   for member in members:
