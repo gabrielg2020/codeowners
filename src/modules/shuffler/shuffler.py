@@ -1,6 +1,6 @@
 import random
 
-def shuffle_members_current_repos(members: list, repos: list, developers: list):
+def shuffle_members_current_repos(members: list, repos: list, developers: list) -> list | None:
   """Changes all members current_repo, adds current_repo to repos list and increments number_of_times_co"""
   if isinstance(members, str) or isinstance(repos, str):
       # Stops strings being indexed like a list
@@ -13,8 +13,12 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list):
 
   distribution = get_developer_repo_distribution(developers, repos)
 
-  for entry in distribution:
-    print(f'{entry['acc_name']} gets {entry['new_repo']}')
+  # Update developers list
+  for i in range(len(developers) ):
+    developers[i]['current_repo'] = distribution[i]['new_repo']
+    developers[i]['repos'].append(distribution[i]['new_repo'])
+    developers[i]['repos'] = list(set(developers[i]['repos']))
+    developers[i]['number_of_times_co'] += 1
 
   return developers
 
