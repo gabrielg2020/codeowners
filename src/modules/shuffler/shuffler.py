@@ -31,8 +31,6 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
   if not isinstance(members, list) or not isinstance(developers, list):
     logger.error("'members' or 'developers' are not type list")
     return None
-  print(f'{members} + \n')
-  print(developers)
   for member in members:
     if not any(developer['acc_name'] == member for developer in developers):
       developers.append({
@@ -42,7 +40,6 @@ def add_members_to_developers(members: list, developers: list) -> list[dict]:
         'repos': []
       })
 
-  
   return developers
 
 def get_developer_repo_distribution(developers: list, repos: list) -> list:
@@ -118,4 +115,5 @@ def find_least_repeated_repo(developer: dict, distribution: list, repos: list) -
     if repo not in developer['repos'] and count < min_count:
       least_repeated_repo = repo
       min_count = count
+
   return least_repeated_repo

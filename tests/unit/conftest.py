@@ -6,9 +6,7 @@ import pytest
 from modules.apiHandler import (
   get_github_instance,
   get_organisation,
-  get_repo,
-  get_members, 
-  get_codeowners_history_file
+  get_repo
 )
 
 # --- get_github_instance ---
@@ -83,3 +81,30 @@ def invalid_repo_invalid_org_invalid_name(invalid_organisation)  -> Repository |
   invalid_repo_name = 'invalid_repo_name'
   repo = get_repo(invalid_organisation, invalid_repo_name)
   return repo
+
+# --- shuffle.py ---
+@pytest.fixture
+def valid_members() -> list[str]:
+  return ['member_1', 'member_2', 'member_3']
+
+@pytest.fixture
+def valid_unfinished_developers() -> list[dict]:
+  return [
+    {'acc_name': 'member_1', 'number_of_times_co': 1, 'current_repo': 'current-repo', 'repos': ['current-repo']}
+  ]
+
+@pytest.fixture
+def valid_developers() -> list[dict]:
+  return [
+    {'acc_name': 'member_1', 'number_of_times_co': 1, 'current_repo': 'current-repo', 'repos': ['current-repo']},
+    {'acc_name': 'member_2', 'number_of_times_co': 0, 'current_repo': '', 'repos': []},
+    {'acc_name': 'member_3', 'number_of_times_co': 0, 'current_repo': '', 'repos': []},
+  ]
+
+@pytest.fixture
+def valid_repo_availability() -> dict:
+  return {
+    'repo_1': True,
+    'repo_2': True,
+    'repo_3': True
+  }
