@@ -144,7 +144,7 @@ def test_shuffle_members_current_repos(valid_members, valid_developers) -> None:
   expected_result = [
     {'acc_name': 'member_2', 'number_of_times_co': 1, 'current_repo': 'repo_1', 'repos': ['repo_1']}, 
     {'acc_name': 'member_3', 'number_of_times_co': 1, 'current_repo': 'repo_2', 'repos': ['repo_2']}, 
-    {'acc_name': 'member_1', 'number_of_times_co': 2, 'current_repo': 'repo_3', 'repos': ['repo_3', 'repo_1']}
+    {'acc_name': 'member_1', 'number_of_times_co': 2, 'current_repo': 'repo_3', 'repos': ['repo_1', 'repo_3']}
   ]
 
   assert shuffle_members_current_repos(valid_members, repos, valid_developers) == expected_result
