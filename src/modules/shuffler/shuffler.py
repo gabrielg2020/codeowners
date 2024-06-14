@@ -66,7 +66,11 @@ def get_developer_repo_distribution(developers: list, repos: list) -> list:
       for repo in repos:
         if repo_availability[repo]:
           distribution.append({'acc_name': developer['acc_name'], 'new_repo': repo})
+          repo_availability[repo] = False
           break
+        else:
+          for repo in repo_availability:
+            repo = True
 
   return distribution
 
