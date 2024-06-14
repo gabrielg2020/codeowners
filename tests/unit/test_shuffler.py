@@ -17,6 +17,7 @@ def test_add_members_to_developers_with_invalid_input() -> None:
   assert add_members_to_developers('invalid_members', 'invalid_developers') is None
 
 def test_backtrack(valid_developers, valid_repo_availability) -> None:
+  """Test backtrack with all valid inputs"""
   distribution = []
   unassigned = []
 
@@ -27,6 +28,7 @@ def test_backtrack(valid_developers, valid_repo_availability) -> None:
   assert len(distribution) == len(valid_developers) - len(unassigned)
 
 def test_backtrack_with_no_developers(valid_repo_availability) -> None:
+  """Test backtrack with an empty developers list"""
   empty_developers = []
   distribution = []
   unassigned = []
@@ -38,6 +40,7 @@ def test_backtrack_with_no_developers(valid_repo_availability) -> None:
   assert len(distribution) == len(empty_developers) - len(unassigned)
 
 def test_backtrack_with_extra_developers(valid_developers, valid_repo_availability) -> None:
+  """Test backtrack with a developers list that is larger than repo dict"""
   valid_developers.append(
     {'acc_name': 'member_4', 'number_of_times_co': 0, 'current_repo': '', 'repos': []}
   )
@@ -51,6 +54,7 @@ def test_backtrack_with_extra_developers(valid_developers, valid_repo_availabili
   assert len(distribution) == len(valid_developers) - len(unassigned)
 
 def test_backtrack_with_no_repos(valid_developers) -> None:
+  """Test backtrack with an empty repos dict"""
   repo_availability = {
     'repo_1': False,  
     'repo_2': False,
