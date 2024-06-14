@@ -1,7 +1,8 @@
 import pytest
 from modules.shuffler import (
   add_members_to_developers,
-  backtrack
+  backtrack, 
+  find_least_repeated_repo
 )
 
 def test_add_members_to_developers(valid_members, valid_unfinished_developers, valid_developers) -> None:
@@ -69,3 +70,26 @@ def test_backtrack_with_no_repos(valid_developers) -> None:
   assert result is True
   assert len(unassigned) == 3
   assert len(distribution) == len(valid_developers) - len(unassigned)
+
+def test_find_least_repeated_repo(valid_distribution) -> None:
+  """Test find_least_repeated_repo with all valid inputs"""
+  repos = ['repo_1', 'repo_2', 'repo_3']
+  developer = {'acc_name': 'member_1', 'repos': ['repo_1', 'repo_2']}
+
+  assert find_least_repeated_repo(developer, valid_distribution, repos) == 'repo_3'
+  
+def test_find_least_repeated_repo_with_empty_distribution() -> None:
+  """Test find_least_repeated_repo with with empty distribution list"""
+  distribution = []
+  repos = ['repo_1', 'repo_2', 'repo_3']
+  developer = {'acc_name': 'member_1', 'repos': ['repo_1']}
+
+  assert find_least_repeated_repo(developer, distribution, repos) == 'repo_2'
+
+def test_find_least_repeated_repo_with_full_developer_repos() -> None:
+  """Test find_least_repeated_repo with with a developer that has all repos and empty developers list"""
+  distribution = []
+  repos = ['repo_1', 'repo_2', 'repo_3']
+  developer = {'acc_name': 'member_1', 'repos': ['repo_1', 'repo_2', 'repo_3']}
+
+  assert find_least_repeated_repo(developer, distribution, repos) is None

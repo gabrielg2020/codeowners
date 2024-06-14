@@ -98,7 +98,7 @@ def valid_developers() -> list[dict]:
   return [
     {'acc_name': 'member_1', 'number_of_times_co': 1, 'current_repo': 'current-repo', 'repos': ['current-repo']},
     {'acc_name': 'member_2', 'number_of_times_co': 0, 'current_repo': '', 'repos': []},
-    {'acc_name': 'member_3', 'number_of_times_co': 0, 'current_repo': '', 'repos': []},
+    {'acc_name': 'member_3', 'number_of_times_co': 0, 'current_repo': '', 'repos': []}
   ]
 
 @pytest.fixture
@@ -108,3 +108,11 @@ def valid_repo_availability() -> dict:
     'repo_2': True,
     'repo_3': True
   }
+
+@pytest.fixture
+def valid_distribution() -> list[dict]:
+  return [
+    {'acc_name': 'member_1', 'new_repo': 'repo_1'},
+    {'acc_name': 'member_2', 'new_repo': 'repo_2'},
+    {'acc_name': 'member_3', 'new_repo': 'repo_2'}
+  ]
