@@ -7,7 +7,8 @@ from modules.apiHandler import (
   get_members,
   get_repos,
   validate_co_history_file,
-  initialise_api
+  initialise_api,
+  write_to_file
 )
 
 # --- get_github_instance ---
@@ -284,3 +285,11 @@ def test_initialise_api_invalid() -> None:
   invalid_repo_name = 'invalid_repo_name'
 
   assert initialise_api(invalid_token, invalid_org_name, invalid_repo_name) is None
+
+def test_write_to_file_create(valid_repo) -> None:
+  valid_file_name = 'DELETE_ME.txt'
+  write_to_file(valid_file_name, '!!IF YOU SEE THIS FILE, PLEASE DELETE!!', valid_repo, force_create_new_file=True)
+  valid_file = get_file(valid_repo, valid_file_name)
+  assert b'!!IF YOU SEE THIS FILE, PLEASE DELETE!!' in valid_file.decoded_content
+  valid_repo.delete_file(valid_file_name, "removed testing file", valid_file.sha, branch='main')
+  assert get_file(valid_repo, valid_file_name) is None
