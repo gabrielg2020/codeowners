@@ -1,6 +1,5 @@
 import json
 import logging
-import base64
 from github import Github, GithubException, Auth
 from github.Organization import Organization
 from github.Repository import Repository

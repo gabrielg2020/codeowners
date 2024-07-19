@@ -4,4 +4,7 @@ api_handler_modules = ['initialise_api', 'get_codeowners_history_file', 'get_git
 from .shuffler import shuffle_members_current_repos, add_members_to_developers, get_developer_repo_distribution, backtrack, is_valid_assignment, find_least_repeated_repo
 shuffler_modules = ['shuffle_members_current_repos', 'add_members_to_developers', 'get_developer_repo_distribution', 'backtrack', 'is_valid_assignment', 'find_least_repeated_repo']
 
-__all__ = api_handler_modules + shuffler_modules
+from .coCreator import create_codeowners
+coCreator_modules = ['create_codeowners']
+
+__all__ = api_handler_modules + shuffler_modules + coCreator_modules
