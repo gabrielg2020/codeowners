@@ -1,5 +1,6 @@
 import json
 import logging
+import base64
 from github import Github, GithubException, Auth
 from github.Organization import Organization
 from github.Repository import Repository
@@ -171,4 +172,38 @@ def validate_co_history_file(file_contents) -> dict:
     return codeowners_content
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
+    return None
+  
+def write_to_file(file_name: str, new_file_content: any, repo: Repository, branch:str = 'main', force_create_new_file = False) -> None:
+  # Check if data is json or not
+  if force_create_new_file == False and (file_name != 'co_history.json' or file_name != 'CODEOWNERS'):
+    try:
+      json.loads(new_file_content)
+      logger.info(f'{file_name} not found in repo. Assuming data to be written is to co_history.json')
+      file_name = 'co_history.json'
+    except:
+      logger.info(f'{file_name} not found in repo. Assuming data to be written is to CODEOWNERS')
+      # Check if CODEOWNERS exists
+      file_name = 'CODEOWNERS'
+
+  file_contents = get_file(repo, file_name)
+
+  if force_create_new_file:
+    logger.warning('force_create_new_file has been set to True. I hope you know what you are doing.')
+
+  # Create the file
+  if file_contents == None or force_create_new_file == True:
+    try:
+      repo.create_file(file_name, f'Updated {file_name}', new_file_content, branch=branch)
+      return True
+    except:
+      logger.error(f'Failed to create {file_name}: {e}')
+    return None
+  
+  # Edit the file in repo
+  try:
+    repo.update_file(file_contents.path, f'Updated {file_name}', new_file_content, file_contents.sha, branch=branch)
+    return True
+  except Exception as e:
+    logger.error(f'Failed to edit {file_name}: {e}')
     return None
