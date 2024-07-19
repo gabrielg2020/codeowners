@@ -180,7 +180,7 @@ def write_to_file(file_name: str, new_file_content: any, repo: Repository, branc
       json.loads(new_file_content)
       logger.info(f'{file_name} not found in repo. Assuming data to be written is to co_history.json')
       file_name = 'co_history.json'
-    except:
+    except Exception as e:
       logger.info(f'{file_name} not found in repo. Assuming data to be written is to CODEOWNERS')
       # Check if CODEOWNERS exists
       file_name = 'CODEOWNERS'
@@ -195,7 +195,7 @@ def write_to_file(file_name: str, new_file_content: any, repo: Repository, branc
     try:
       repo.create_file(file_name, f'Updated {file_name}', new_file_content, branch=branch)
       return True
-    except:
+    except Exception as e:
       logger.error(f'Failed to create {file_name}: {e}')
     return None
   
