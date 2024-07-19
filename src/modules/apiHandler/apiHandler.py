@@ -65,7 +65,7 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
     org = g.get_organization(org_name)
     return org
   except GithubException as e:
-    logger.error(f'Failed to find organisation: {e.data['message']}')
+    logger.error(f'Failed to find {org_name} as a organisation: {e.data['message']}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -77,7 +77,7 @@ def get_repo(org: Organization, repo_name: str) -> Repository | None:
     repo = org.get_repo(repo_name)
     return repo
   except GithubException as e:
-    logger.error(f'Failed to find .github repo: {e.data['message']}')
+    logger.error(f'Failed to find {repo_name} repo: {e.data['message']}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -94,7 +94,7 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
     
     return file
   except GithubException as e:
-    logger.error(f'Failed to find file: {e.data['message']}')
+    logger.warning(f'Failed to find {file_name}: {e.data['message']}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -175,14 +175,13 @@ def validate_co_history_file(file_contents) -> dict:
   
 def write_to_file(file_name: str, new_file_content: any, repo: Repository, branch:str = 'main', force_create_new_file = False) -> None:
   # Check if data is json or not
-  if force_create_new_file == False and (file_name != 'co_history.json' or file_name != 'CODEOWNERS'):
+  if not force_create_new_file and ('co_history.json' in file_name and 'CODEOWNERS' in file_name):
     try:
       json.loads(new_file_content)
       logger.info(f'{file_name} not found in repo. Assuming data to be written is to co_history.json')
       file_name = 'co_history.json'
     except Exception as e:
       logger.info(f'{file_name} not found in repo. Assuming data to be written is to CODEOWNERS')
-      # Check if CODEOWNERS exists
       file_name = 'CODEOWNERS'
 
   file_contents = get_file(repo, file_name)
@@ -193,7 +192,7 @@ def write_to_file(file_name: str, new_file_content: any, repo: Repository, branc
   # Create the file
   if file_contents == None or force_create_new_file == True:
     try:
-      repo.create_file(file_name, f'Updated {file_name}', new_file_content, branch=branch)
+      repo.create_file(file_name, f'Created {file_name}', new_file_content, branch=branch)
       return True
     except Exception as e:
       logger.error(f'Failed to create {file_name}: {e}')
