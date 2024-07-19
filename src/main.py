@@ -1,9 +1,9 @@
 import os
 import json
 from dotenv import load_dotenv
-from modules.apiHandler import initialise_api, get_codeowners_history_file, get_members, get_repos, write_to_file
+from modules.apiHandler import initialise_api, get_codeowners_history_file, get_members, get_repos, write_to_file, get_repo
 from modules.shuffler import shuffle_members_current_repos
-from modules.coCreator import create_codeowners
+from modules.coCreator import create_codeowners_files
 
 def main() -> None:  
   # Load .env values
@@ -33,7 +33,12 @@ def main() -> None:
 
   write_to_file('co_history.json', new_co_history, repo)
 
-  print(create_codeowners())
+  # Create and push new CODEOWNERS
+  repo_codeowners_map = create_codeowners_files(new_developers, repos)
+
+  for repo in repo_codeowners_map.keys():
+    current_repo = get_repo(org, repo)
+    write_to_file('.github/CODEOWNERS', repo_codeowners_map[repo], current_repo)
 
 if __name__ == '__main__':
   main()
