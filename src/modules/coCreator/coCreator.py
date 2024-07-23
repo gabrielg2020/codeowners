@@ -11,8 +11,6 @@ def create_codeowners_files(developers: dict, repos: list) -> dict:
       repo_developer_map[current_repo].append(developer['acc_name'])
     else:
       repo_developer_map[current_repo] = [developer['acc_name']]
-
-  print(repo_developer_map)
   
   repo_codeowners_map = {}
   for repo in repos:

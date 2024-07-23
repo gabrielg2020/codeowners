@@ -5,6 +5,11 @@ from modules.apiHandler import initialise_api, get_codeowners_history_file, get_
 from modules.shuffler import shuffle_members_current_repos
 from modules.coCreator import create_codeowners_files
 
+class print_color: 
+  red = '\033[31m'
+  green = '\033[32m'
+
+
 def main() -> None:  
   # Load .env values
   load_dotenv()
@@ -15,10 +20,12 @@ def main() -> None:
   # Initialise API
   initialise_result = initialise_api(token, org_username, repo_name)
   if initialise_result is None:
-    print('Initalisation failed. Please check your token, organisation name, or repository name')
+    print(print_color.red, 'Initalisation failed. Please check your token, organisation name, or repository name. \n')
     return
   
   g, org, repo = initialise_result
+
+  print(print_color.green, f'API successfully connected to: {org_username}. \n')
 
   # Grab org details
   members = get_members(org)
@@ -39,6 +46,10 @@ def main() -> None:
   for repo in repo_codeowners_map.keys():
     current_repo = get_repo(org, repo)
     write_to_file('.github/CODEOWNERS', repo_codeowners_map[repo], current_repo)
+
+  print(print_color.green, 'Successfully wrote to .github/co_history.json & <repo>/.github/CODEOWNERS \n')
+  
+  print(print_color.green, 'Successfully shuffled developers. \n')
 
 if __name__ == '__main__':
   main()
