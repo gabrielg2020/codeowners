@@ -26,31 +26,19 @@ def main() -> None:
   co_history = get_codeowners_history_file(repo, 'co_history.json')
 
   # Create and push new co_history.json
-  # new_developers = shuffle_members_current_repos(members, repos, co_history['developers'])
-  # new_co_history = json.dumps({
-  #   "developers": new_developers
-  # })
+  new_developers = shuffle_members_current_repos(members, repos, co_history['developers'])
+  new_co_history = json.dumps({
+    "developers": new_developers
+  })
 
-  # write_to_file('co_history.json', new_co_history, repo)
+  write_to_file('co_history.json', new_co_history, repo)
 
-  # # Create and push new CODEOWNERS
-  # repo_codeowners_map = create_codeowners_files(new_developers, repos)
+  # Create and push new CODEOWNERS
+  repo_codeowners_map = create_codeowners_files(new_developers, repos)
 
-  # for repo in repo_codeowners_map.keys():
-  #   current_repo = get_repo(org, repo)
-  #   write_to_file('.github/CODEOWNERS', repo_codeowners_map[repo], current_repo)
-
-  valid_developers = [{
-    'acc_name': 'dev_1',
-    'current_repo': 'test_repo_1'
-  },{
-    'acc_name': 'dev_2',
-    'current_repo': 'test_repo_2'
-  }]
-
-  valid_repos = ['test_repo_1, test_repo_2, test_repo_3']
-
-  print(create_codeowners_files(valid_developers, valid_repos))
+  for repo in repo_codeowners_map.keys():
+    current_repo = get_repo(org, repo)
+    write_to_file('.github/CODEOWNERS', repo_codeowners_map[repo], current_repo)
 
 if __name__ == '__main__':
   main()
