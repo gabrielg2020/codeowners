@@ -11,6 +11,8 @@ def create_codeowners_files(developers: dict, repos: list) -> dict:
       repo_developer_map[current_repo].append(developer['acc_name'])
     else:
       repo_developer_map[current_repo] = [developer['acc_name']]
+
+  print(repo_developer_map)
   
   repo_codeowners_map = {}
   for repo in repos:
@@ -19,7 +21,7 @@ def create_codeowners_files(developers: dict, repos: list) -> dict:
       owners = repo_developer_map[repo]
       codeowners_string += f'{ "nobody " if owners == [] else " and ".join('@' + owner for owner in owners)} own the {repo} repository. \n * {" ".join('@' + owner for owner in owners)}'
     else:
-      codeowners_string += f'nobody owns the {repo} repository'
+      codeowners_string += f'nobody owns the {repo} repository.'
 
     repo_codeowners_map[repo] = codeowners_string
 
