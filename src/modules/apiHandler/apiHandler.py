@@ -9,7 +9,7 @@ from github.ContentFile import ContentFile
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | None, Organization | None, Repository | None] | None:
+def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Organization | None, Repository | None] | None:
   """Initialises GitHub API and returns instances of GitHub, Organisation and Repository."""
   g = get_github_instance(token)
   if g is None:
@@ -22,7 +22,7 @@ def initialise_api(token:str, org_name:str, repo_name:str) -> tuple[Github | Non
   if repo is None:
     return None
 
-  return g, org, repo
+  return org, repo
 
 def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json') -> dict | None:
   """Returns the contents of the co_history.json file"""

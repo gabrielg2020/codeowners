@@ -3,3 +3,4 @@ pytest-mock
 PyGithub
 logger
 pytest
+pylint

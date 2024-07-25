@@ -110,5 +110,6 @@ Improved `info`, `warning` and `error` logging.
 
 GitHub API v3 wrapper.
 
+### `pylint`
 
-
+Python linting.
