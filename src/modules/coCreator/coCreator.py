@@ -17,7 +17,7 @@ def create_codeowners_files(developers: dict, repos: list) -> dict:
     codeowners_string = '# This file shows that '
     if repo in repo_developer_map.keys():
       owners = repo_developer_map[repo]
-      codeowners_string += f'{ "nobody " if owners == [] else " and ".join('@' + owner for owner in owners)} own the {repo} repository. \n * {" ".join('@' + owner for owner in owners)}'
+      codeowners_string += f'{ "nobody " if owners == [] else " and ".join("@" + owner for owner in owners)} own the {repo} repository. \n * {" ".join("@" + owner for owner in owners)}'
     else:
       codeowners_string += f'nobody owns the {repo} repository.'
 
