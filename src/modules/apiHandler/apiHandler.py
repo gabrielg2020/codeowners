@@ -42,7 +42,7 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     return codeowners_content
 
   except GithubException as e:
-    logger.error(f'Error encountered: {e.data['message']}')
+    logger.error(f'Error encountered: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -56,7 +56,7 @@ def get_github_instance(token: str) -> Github | None:
     g.get_user().login # Will fail if bad credentials  
     return g
   except GithubException as e:
-    logger.error(f'Failed to authenticate: {e.data['message']}')
+    logger.error(f'Failed to authenticate: {e.data["message"]}')
     return None
 
 def get_organisation(g: Github, org_name: str) -> Organization | None:
@@ -65,7 +65,7 @@ def get_organisation(g: Github, org_name: str) -> Organization | None:
     org = g.get_organization(org_name)
     return org
   except GithubException as e:
-    logger.error(f'Failed to find {org_name} as a organisation: {e.data['message']}')
+    logger.error(f'Failed to find {org_name} as a organisation: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -77,7 +77,7 @@ def get_repo(org: Organization, repo_name: str) -> Repository | None:
     repo = org.get_repo(repo_name)
     return repo
   except GithubException as e:
-    logger.error(f'Failed to find {repo_name} repo: {e.data['message']}')
+    logger.error(f'Failed to find {repo_name} repo: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -94,7 +94,7 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
     
     return file
   except GithubException as e:
-    logger.warning(f'Failed to find {file_name}: {e.data['message']}')
+    logger.warning(f'Failed to find {file_name}: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -107,7 +107,7 @@ def get_members(o: Organization) ->  list[str] | None:
     member_logins = list(member.login for member in members)
     return member_logins
   except GithubException as e:
-    logger.error(f'Failed to get members: {e.data['message']}')
+    logger.error(f'Failed to get members: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -121,7 +121,7 @@ def get_repos(o: Organization) ->  list[str] | None:
     repo_names = list(repo.name for repo in repos if repo.name != '.github')
     return repo_names
   except GithubException as e:
-    logger.error(f'Failed to get repos: {e.data['message']}')
+    logger.error(f'Failed to get repos: {e.data["message"]}')
     return None
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
@@ -137,7 +137,7 @@ def validate_co_history_file(file_contents) -> dict:
         codeowners_content = file_contents
       codeowners_content = json.loads(codeowners_content)
     except Exception as e:
-      logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data['message']}')
+      logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data["message"]}')
       return None
     
     if 'developers' not in codeowners_content or not isinstance(codeowners_content['developers'], list):
