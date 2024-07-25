@@ -42,11 +42,12 @@ git clone git@github.com:gabrielg2020/codeowners.git && cd codeowners
 
 MacOS & Linux
 ```shell
-python3 -m venv .venv
+python3 -m venv .venv && source .venv/bin/activate
 ```
 Windows
 ```shell
 python -m venv C:\path\to\codeowners\.venv
+source .venv/bin/activate
 ```
 
 ### 5. Install required packages
@@ -71,6 +72,26 @@ Windows
 Copy-Item .env.dist .env
 (Get-Content .env) -replace 'tk', '<REPLACE_ME_WITH_YOUR_TOKEN>' | Set-Content .env
 ```
+
+## Optional: Setting up unit tests.
+
+### Clone testing repository
+
+```shell
+git clone git@github.com:codeowners-rfc-test/testing-repo.git
+```
+
+### Run `Pytest`
+
+```shell
+pytest
+```
+
+Error highlighting
+```shell
+pytest -vv --code-highlighting=yes
+```
+
 ## Packages used
 
 ### `python-dotev`
