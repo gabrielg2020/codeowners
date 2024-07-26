@@ -45,9 +45,9 @@ def main() -> None:
   # Create and push new CODEOWNERS
   repo_codeowners_map = create_codeowners_files(new_developers, repos)
 
-  for repo in repo_codeowners_map.keys():
+  for repo, codeowners in repo_codeowners_map.items():
     current_repo = get_repo(org, repo)
-    write_to_file('.github/CODEOWNERS', repo_codeowners_map[repo], current_repo)
+    write_to_file('.github/CODEOWNERS', codeowners, current_repo)
 
   print(PrintColour.green, 'Successfully wrote to .github/co_history.json & <repo>/.github/CODEOWNERS \n')
 

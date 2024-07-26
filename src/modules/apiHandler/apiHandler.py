@@ -36,7 +36,7 @@ def get_codeowners_history_file(r: Repository, file_name: str = 'co_history.json
     if file_contents is None:
       logger.info(f'Cannot find {file_name}, creating a base history file.')
       return {'developers': []}
-    
+
     # Validate file
     codeowners_content = validate_co_history_file(file_contents)
     return codeowners_content
@@ -53,8 +53,8 @@ def get_github_instance(token: str) -> Github | None:
   auth = Auth.Token(token)
   g = Github(auth=auth)
   try:
-    g.get_user().login # Will fail if bad credentials  
-    return g
+    if g.get_user().login: # Will fail if bad credentials
+      return g
   except GithubException as e:
     logger.error(f'Failed to authenticate: {e.data["message"]}')
     return None
@@ -82,7 +82,7 @@ def get_repo(org: Organization, repo_name: str) -> Repository | None:
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
-  
+
 def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile | None:
   """Returns a ContentFile instance if file_name is valid, else None."""
   try:
@@ -91,7 +91,7 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
     if isinstance(file, list):
       logger.info(f'{file_name} is a directory not a file.')
       return None
-    
+
     return file
   except GithubException as e:
     logger.warning(f'Failed to find {file_name}: {e.data["message"]}')
@@ -99,7 +99,7 @@ def get_file(r: Repository, file_name: str) -> list[ContentFile] | ContentFile |
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
-  
+
 def get_members(o: Organization) ->  list[str] | None:
   """Returns a tuple of members if Organisation is valid, else None."""
   try:
@@ -126,24 +126,25 @@ def get_repos(o: Organization) ->  list[str] | None:
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
-  
+
 def validate_co_history_file(file_contents) -> dict:
+  """Returns co_history if exist and is valid."""
   try:
     # Check if file follows .json formatting
     try:
-      if type(file_contents) == ContentFile:
+      if isinstance(file_contents, ContentFile):
         codeowners_content = file_contents.decoded_content
       else:
         codeowners_content = file_contents
       codeowners_content = json.loads(codeowners_content)
     except Exception as e:
-      logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e.data["message"]}')
+      logger.error(f'Failed to decode into json, make sure that file is utf-8 encoded and in correct json format: {e}')
       return None
-    
+
     if 'developers' not in codeowners_content or not isinstance(codeowners_content['developers'], list):
-      logger.error(f'.json does not have a "developers" list')
+      logger.error('.json does not have a "developers" list')
       return None
-    
+
     # Check if file follows co_history.json formatting
     required_keys_types = {
       'acc_name': str,
@@ -155,25 +156,26 @@ def validate_co_history_file(file_contents) -> dict:
     for developer in codeowners_content['developers']:
       # Check if keys are present
       if not all(key in developer for key in required_keys_types):
-        logger.error(f'"developers" does not have the correct keys.')
+        logger.error('"developers" does not have the correct keys.')
         return None
-      
+
       # Check if keys have correct type
       for key, expected_type in required_keys_types.items():
         if not isinstance(developer[key], expected_type):
-          logger.error(f'"developers" keys does not have the correct types.')
+          logger.error('"developers" keys does not have the correct types.')
           return None
         # Check that repos list is strings
         if key == 'repos' and not all(isinstance(item, str) for item in developer[key]):
-          logger.error(f'"developers" "repos" list is not fully populated with string types.')
+          logger.error('"developers" "repos" list is not fully populated with string types.')
           return None
-      
+
     return codeowners_content
   except Exception as e:
     logger.error(f'Exception has occurred: {e}')
     return None
-  
+
 def write_to_file(file_name: str, new_file_content: any, repo: Repository, branch:str = 'main', force_create_new_file = False) -> None:
+  """Writes to a file in a repository."""
   # Check if data is json or not
   if not force_create_new_file and ('co_history.json' in file_name and 'CODEOWNERS' in file_name):
     try:
@@ -181,7 +183,7 @@ def write_to_file(file_name: str, new_file_content: any, repo: Repository, branc
       logger.info(f'{file_name} not found in repo. Assuming data to be written is to co_history.json')
       file_name = 'co_history.json'
     except Exception as e:
-      logger.info(f'{file_name} not found in repo. Assuming data to be written is to CODEOWNERS')
+      logger.info(f'{file_name} not found in repo. Assuming data to be written is to CODEOWNERS. Error: {e}')
       file_name = 'CODEOWNERS'
 
   file_contents = get_file(repo, file_name)
@@ -190,14 +192,14 @@ def write_to_file(file_name: str, new_file_content: any, repo: Repository, branc
     logger.warning('force_create_new_file has been set to True. I hope you know what you are doing.')
 
   # Create the file
-  if file_contents == None or force_create_new_file == True:
+  if file_contents is None or force_create_new_file is True:
     try:
       repo.create_file(file_name, f'Created {file_name}', new_file_content, branch=branch)
       return True
     except Exception as e:
       logger.error(f'Failed to create {file_name}: {e}')
     return None
-  
+
   # Edit the file in repo
   try:
     repo.update_file(file_contents.path, f'Updated {file_name}', new_file_content, file_contents.sha, branch=branch)

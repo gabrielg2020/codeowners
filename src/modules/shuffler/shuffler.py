@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 def shuffle_members_current_repos(members: list, repos: list, developers: list) -> list | None:
   """Changes all members current_repo, adds current_repo to repos list and increments number_of_times_co"""
   if not isinstance(members, list) or not isinstance(repos, list):
-      logger.error("'members' or 'repos' are not type list")
-      return None
-  
+    logger.error("'members' or 'repos' are not type list")
+    return None
+
   # Add members that don't exist in developers
   developers = add_members_to_developers(members, developers)
   if developers is None:
@@ -18,11 +18,11 @@ def shuffle_members_current_repos(members: list, repos: list, developers: list) 
   distribution = get_developer_repo_distribution(developers, repos)
 
   # Update developers list
-  for i in range(len(developers)):
-    developers[i]['current_repo'] = distribution[i]['new_repo']
-    developers[i]['repos'].append(distribution[i]['new_repo'])
-    developers[i]['repos'] = list(set(developers[i]['repos']))
-    developers[i]['number_of_times_co'] += 1
+  for i, developer in enumerate(developers):
+    developer['current_repo'] = distribution[i]['new_repo']
+    developer['repos'].append(distribution[i]['new_repo'])
+    developer['repos'] = list(set(developer['repos']))
+    developer['number_of_times_co'] += 1
 
   return developers
 
@@ -46,7 +46,7 @@ def get_developer_repo_distribution(developers: list, repos: list) -> list:
   """Returns the distribution based of data in developers and repos"""
   # Sort developers by the repos they previously had
   developers.sort(key=lambda dev: len(dev['repos']))
-  
+
   # Availability map
   repo_availability = {repo: True for repo in repos}
 
@@ -68,9 +68,8 @@ def get_developer_repo_distribution(developers: list, repos: list) -> list:
           distribution.append({'acc_name': developer['acc_name'], 'new_repo': repo})
           repo_availability[repo] = False
           break
-        else:
-          for repo in repo_availability:
-            repo = True
+        for repo in repo_availability:
+          repo = True
 
   return distribution
 
@@ -79,7 +78,7 @@ def backtrack(developers: list, repo_availability: dict, index: int, distributio
   # Recursive base case
   if index == len(developers):
     return True
-  
+
   developer = developers[index]
   assigned = False
   for repo in repo_availability:
@@ -92,7 +91,7 @@ def backtrack(developers: list, repo_availability: dict, index: int, distributio
       # Recursively assign repos to the remaining developers
       if backtrack(developers, repo_availability, index + 1, distribution, unassigned):
         return True
-      
+
       # Backtrack if assignment was not successful
       distribution.pop()
       repo_availability[repo] = True

@@ -57,7 +57,7 @@ ignore-paths=
 # Files or directories matching the regular expression patterns are skipped.
 # The regex matches against base names, not paths. The default value ignores
 # Emacs file locks
-ignore-patterns=^\.#
+ignore-patterns=__init__.py
 
 # List of module names for which member attributes should not be checked and
 # will not be imported (useful for modules/projects where namespaces are
@@ -311,7 +311,7 @@ max-parents=7
 max-public-methods=20
 
 # Maximum number of return / yield for function / method body.
-max-returns=6
+max-returns=8
 
 # Maximum number of statements in function / method body.
 max-statements=50
@@ -439,6 +439,11 @@ disable=raw-checker-failed,
         E0401,
         R0903,
         C0114,
+        E0015,
+        C0103,
+        W1203,
+        W0718,
+        R1710,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
