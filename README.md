@@ -71,8 +71,7 @@ cp .env.dist .env && sed -i 's/tk/<REPLACE_ME_WITH_YOUR_TOKEN>/g' .env
 ```
 Windows
 ```shell
-Copy-Item .env.dist .env
-(Get-Content .env) -replace 'tk', '<REPLACE_ME_WITH_YOUR_TOKEN>' | Set-Content .env
+copy .env.dist .env && powershell -Command "(Get-Content '.env') -replace 'tk','<REPLACE_ME_WITH_YOUR_TOKEN>' | Set-Content '.env'"
 ```
 
 ## Optional: Setting up unit tests.
