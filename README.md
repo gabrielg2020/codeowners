@@ -47,7 +47,9 @@ python3 -m venv .venv && source .venv/bin/activate
 Windows
 ```shell
 python -m venv C:\path\to\codeowners\.venv
-source .venv/bin/activate
+```
+```shell
+C:\path\to\codeowners\.venv\Scripts\activate.bat
 ```
 
 ### 5. Install required packages
