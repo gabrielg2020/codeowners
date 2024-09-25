@@ -47,7 +47,9 @@ python3 -m venv .venv && source .venv/bin/activate
 Windows
 ```shell
 python -m venv C:\path\to\codeowners\.venv
-source .venv/bin/activate
+```
+```shell
+C:\path\to\codeowners\.venv\Scripts\activate.bat
 ```
 
 ### 5. Install required packages
@@ -69,8 +71,7 @@ cp .env.dist .env && sed -i 's/tk/<REPLACE_ME_WITH_YOUR_TOKEN>/g' .env
 ```
 Windows
 ```shell
-Copy-Item .env.dist .env
-(Get-Content .env) -replace 'tk', '<REPLACE_ME_WITH_YOUR_TOKEN>' | Set-Content .env
+copy .env.dist .env && powershell -Command "(Get-Content '.env') -replace 'tk','<REPLACE_ME_WITH_YOUR_TOKEN>' | Set-Content '.env'"
 ```
 
 ## Optional: Setting up unit tests.
