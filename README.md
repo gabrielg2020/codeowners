@@ -1,6 +1,6 @@
 # codeowners
 
-Score Received: 70%🎉
+# Score Received: 70%🎉
 
 This was built for my Software Engineering Fundamentals Module (QAC020C125SS).
 
